@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Menu - Fishburger ade in Essaouira</title>
+
+    <!-- Performance: Preconnect to external origins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Fonts: Playfair Display (Headings) & Outfit (Body) -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        .serif {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, #dc2626, #ea580c);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(to bottom, #b91c1c, #c2410c);
+        }
+
+        /* Hide scrollbar for category tabs */
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .menu-item-card {
+            will-change: transform, opacity;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen bg-blue-950">
+
+    <!-- Google Translate Scripts -->
+
+
+    <!-- Redirection & Location Logic -->
+    <script>
+        (function () {
+            const storedLocation = localStorage.getItem('selectedLocation');
+            if (!storedLocation) {
+                window.location.href = 'index.html';
+            }
+        })();
+    </script>
+
+    <!-- Header -->
+    <header id="navbar"
+        class="bg-[#1e3a8a] text-white py-4 lg:py-6 sticky top-0 z-40 shadow-xl transition-all duration-300">
+        <div class="container mx-auto px-6">
+            <div class="flex justify-between items-center">
+                <!-- Brand -->
+                <a href="main.html" class="flex items-center gap-3 group">
+                    <div
+                        class="bg-red-600 text-white w-12 h-12 rounded-full flex items-center justify-center text-xl shadow-lg group-hover:bg-white group-hover:text-red-600 transition-colors">
+                        <i class="fa-solid fa-burger"></i>
+                    </div>
+                    <div class="leading-tight">
+                        <span class="block font-bold text-xl tracking-wider uppercase text-white">Fishburger</span>
+                        <span class="block text-xs font-medium tracking-widest text-white opacity-80">Made In Essaouira</span>
+                    </div>
+                </a>
+
+                <!-- Navigation -->
+                <nav class="hidden md:flex items-center gap-6">
+                    <a href="main.html" class="text-white hover:text-red-400 transition-colors font-semibold">Home</a>
+                    <a href="menu.html" class="text-white font-bold underline decoration-red-500 decoration-2 underline-offset-8">Menu</a>
+                    <a href="order.html"
+                        class="bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 px-6 py-2 rounded-full font-bold transition-all shadow-lg">
+                        Order Now
+                    </a>
+                    <!-- Location Badge -->
+                    <div id="location-badge"
+                        class="bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 rounded-full flex items-center gap-2 text-sm font-bold capitalize">
+                        <i class="fa-solid fa-location-dot text-red-500"></i>
+                        <span id="display-location">Loading...</span>
+                    </div>
+
+                </nav>
+
+                <div class="md:hidden flex items-center gap-1.5 px-3 py-1.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-[10px] font-bold text-white capitalize">
+                    <i class="fa-solid fa-location-dot text-red-500"></i>
+                    <span id="display-location-mobile">Loading...</span>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden text-white" onclick="toggleMobileMenu()">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden fixed inset-0 bg-blue-950 bg-opacity-95 z-50 md:hidden">
+        <div class="flex flex-col h-full p-6">
+            <button onclick="toggleMobileMenu()" class="self-end text-white text-2xl mb-8">
+                <i class="fa-solid fa-times"></i>
+            </button>
+            <nav class="flex flex-col gap-6 text-white text-xl">
+                <a href="main.html" class="hover:text-red-400 transition-colors">Home</a>
+                <a href="menu.html" class="text-red-400 font-bold">Menu</a>
+                <a href="order.html" class="hover:text-red-400 transition-colors">Order Now</a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section
+        class="py-16 md:py-32 bg-gradient-to-br from-blue-950 via-blue-900 to-slate-900 text-white relative overflow-hidden">
+        <!-- Background Image -->
+        <div class="absolute inset-0 z-0">
+            <img src="img/locationback.webp" alt="Location Background" class="w-full h-full object-cover opacity-50"
+                fetchpriority="high" width="1920" height="1080">
+            <div class="absolute inset-0 bg-gradient-to-br from-blue-950/70 via-blue-900/70 to-slate-900/70"></div>
+        </div>
+
+        <div class="container mx-auto px-6 text-center relative z-10">
+            <span
+                class="inline-block text-red-400 font-bold tracking-widest uppercase text-xs px-6 py-2 bg-red-500/20 rounded-full border border-red-500/30 mb-6">
+                Our Kitchen
+            </span>
+            <h1 class="text-3xl md:text-6xl font-bold mb-6 font-serif">
+                Discover Our <span
+                    class="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-orange-400">Signature
+                    Menu</span>
+            </h1>
+            <p class="text-blue-200 text-sm md:text-xl max-w-3xl mx-auto leading-relaxed">
+                From crispy fish burgers to traditional Moroccan-inspired tacos, explore our unique fusion of Atlantic
+                seafood and local spices
+            </p>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section class="py-12 bg-gradient-to-br from-slate-50 to-blue-50">
+        <div class="container mx-auto px-6">
+
+            <!-- Category Tabs (Horizontal Scroll on Mobile) -->
+            <div id="category-tabs"
+                class="flex md:flex-wrap md:justify-center overflow-x-auto whitespace-nowrap gap-3 mb-10 pb-4 scrollbar-hide -mx-6 px-6 scroll-smooth">
+                <button onclick="filterMenu('burgers', this)"
+                    class="menu-tab active px-6 py-3 rounded-full font-bold text-xs md:text-sm uppercase tracking-wide transition-all border-2 bg-blue-950 text-white border-blue-950">
+                    Burgers
+                </button>
+                <button onclick="filterMenu('sides', this)"
+                    class="menu-tab px-6 py-3 rounded-full font-bold text-xs md:text-sm uppercase tracking-wide transition-all border-2 bg-transparent text-slate-600 border-slate-300 hover:border-blue-950">
+                    Sides
+                </button>
+                <button onclick="filterMenu('tapas', this)"
+                    class="menu-tab px-6 py-3 rounded-full font-bold text-xs md:text-sm uppercase tracking-wide transition-all border-2 bg-transparent text-slate-600 border-slate-300 hover:border-blue-950">
+                    Tapas
+                </button>
+                <button onclick="filterMenu('globe', this)"
+                    class="menu-tab px-6 py-3 rounded-full font-bold text-xs md:text-sm uppercase tracking-wide transition-all border-2 bg-transparent text-slate-600 border-slate-300 hover:border-blue-950">
+                    Taste the Globe
+                </button>
+                <button onclick="filterMenu('desserts', this)"
+                    class="menu-tab px-6 py-3 rounded-full font-bold text-xs md:text-sm uppercase tracking-wide transition-all border-2 bg-transparent text-slate-600 border-slate-300 hover:border-blue-950">
+                    Desserts
+                </button>
+                <button onclick="filterMenu('drinks', this)"
+                    class="menu-tab px-6 py-3 rounded-full font-bold text-xs md:text-sm uppercase tracking-wide transition-all border-2 bg-transparent text-slate-600 border-slate-300 hover:border-blue-950">
+                    Drinks
+                </button>
+            </div>
+
+            <!-- Menu Grid - Auto-adjusts columns based on space -->
+            <div id="menu-grid"
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 1.5rem;"
+                class="max-w-6xl mx-auto mb-12">
+                <!-- JS Injects Here -->
+            </div>
+
+            <!-- CTA Section -->
+            <div class="text-center mt-16">
+                <div class="bg-white rounded-3xl p-8 md:p-12 shadow-2xl max-w-2xl mx-auto border border-slate-200">
+                    <h3 class="text-2xl md:text-3xl font-bold text-blue-950 mb-4 font-serif">Ready to Order?</h3>
+                    <p class="text-slate-600 text-sm md:text-base mb-8">Place your order online and enjoy our fresh
+                        seafood delivered to your
+                        door</p>
+                    <a href="order.html"
+                        class="inline-flex items-center justify-center gap-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white px-10 py-5 rounded-full font-bold text-base md:text-lg shadow-2xl shadow-green-600/40 hover:shadow-green-600/60 transition-all transform hover:scale-105">
+                        <i class="fa-solid fa-shopping-cart text-xl"></i>
+                        <span>Order Now</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gradient-to-r from-blue-950 via-blue-900 to-blue-950 text-white py-12">
+        <div class="container mx-auto px-6 text-center">
+            <div class="flex items-center justify-center gap-3 mb-6">
+                <div
+                    class="bg-red-600 text-white w-12 h-12 rounded-full flex items-center justify-center text-xl shadow-lg">
+                    <i class="fa-solid fa-burger"></i>
+                </div>
+                <div class="leading-tight text-left">
+                    <span class="block font-bold text-xl tracking-wider uppercase">Fishburger</span>
+                    <span class="block text-xs font-medium tracking-widest opacity-80">Made In Essaouira</span>
+                </div>
+            </div>
+            <p class="text-blue-200 mb-4">Fresh Seafood, Moroccan Soul</p>
+            <div class="flex justify-center gap-6 mb-6">
+                <a href="https://www.instagram.com/fishburger.essaouira" target="_blank"
+                    class="hover:text-red-400 transition-colors"><i class="fa-brands fa-instagram text-2xl"></i></a>
+                <a href="https://www.facebook.com/p/Fishburger-Essaouira-100087049917638/" target="_blank"
+                    class="hover:text-red-400 transition-colors"><i class="fa-brands fa-facebook text-2xl"></i></a>
+                <a href="https://www.tiktok.com/@fishburgeressaouira?_r=1&_t=ZS-93cKBvmddP3" target="_blank"
+                    class="hover:text-red-400 transition-colors"><i class="fa-brands fa-tiktok text-2xl"></i></a>
+            </div>
+            <p class="text-sm text-blue-300">© 2026 Fishburger Made In Essaouira. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Core Data -->
+    <script src="menu-data.js"></script>
+
+    <!-- JavaScript -->
+    <script>
+        // Use centralized menuData but filtered by location
+        const storedLocForMenu = localStorage.getItem('selectedLocation');
+        const menuItems = window.getMenuData(storedLocForMenu);
+
+        const tabs = document.querySelectorAll('.menu-tab');
+        const menuGrid = document.getElementById('menu-grid');
+
+        function filterMenu(category, clickedElement) {
+            // Update tabs
+            tabs.forEach(tab => {
+                const tabText = tab.textContent.trim().toLowerCase();
+                const isActive = (category === 'globe' && tabText === 'taste the globe') ||
+                    (category !== 'globe' && tabText === category);
+
+                if (isActive) {
+                    tab.classList.remove('bg-transparent', 'text-slate-600', 'border-slate-300');
+                    tab.classList.add('bg-blue-950', 'text-white', 'border-blue-950');
+                } else {
+                    tab.classList.add('bg-transparent', 'text-slate-600', 'border-slate-300');
+                    tab.classList.remove('bg-blue-950', 'text-white', 'border-blue-950');
+                }
+            });
+
+            // Click to center logic
+            if (clickedElement) {
+                clickedElement.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+            }
+
+            // Mapping categories to icons
+            const categoryIcons = {
+                burgers: 'fa-burger',
+                sides: 'fa-pepper-hot',
+                tapas: 'fa-shrimp',
+                globe: 'fa-earth-americas',
+                desserts: 'fa-ice-cream',
+                drinks: 'fa-glass-water'
+            };
+            const iconClass = categoryIcons[category] || 'fa-fish';
+
+            // Display items
+            menuGrid.innerHTML = '';
+            menuItems[category].forEach((item, index) => {
+                const badge = item.note
+                    ? `<div class="absolute -top-3 -right-3 bg-gradient-to-r from-red-600 to-orange-600 text-white text-[10px] font-bold px-3 py-1.5 rounded-full shadow-lg shadow-red-600/50 animate-pulse z-10">+1 Side Free</div>`
+                    : (item.veg ? `<div class="absolute -top-3 -right-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white text-[10px] font-bold px-3 py-1.5 rounded-full shadow-lg shadow-green-600/50 z-10">🌱 Veg</div>` : '');
+
+                const el = document.createElement('div');
+                el.className = 'bg-gradient-to-br from-white to-slate-50 rounded-2xl p-4 md:p-6 shadow-lg hover:shadow-2xl transition-all duration-300 border-2 border-transparent hover:border-red-200 relative group transform flex items-center gap-4';
+                el.style.animationDelay = `${index * 0.1}s`;
+
+                // Build price display with mini option
+                const priceDisplay = item.mini
+                    ? `<div class="flex flex-col">
+                         <div class="flex items-center gap-1.5">
+                           <span class="text-[10px] text-slate-400 uppercase font-bold">Base:</span>
+                           <span class="text-sm md:text-xl font-bold bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent">${item.price}</span>
+                         </div>
+                         <div class="flex items-center gap-1.5">
+                           <span class="text-[10px] text-slate-400 uppercase font-bold">Mini:</span>
+                           <span class="text-sm md:text-lg font-bold text-blue-600">${item.mini}</span>
+                         </div>
+                       </div>`
+                    : `<span class="text-lg md:text-2xl font-bold bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent">${item.price || 'Ask waiter'}</span>`;
+
+                const imageHtml = item.image
+                    ? `<div class="shrink-0 w-24 h-24 rounded-2xl overflow-hidden border border-slate-100 shadow-sm cursor-zoom-in group" onclick="openImageModal('${item.image}')">
+                         <img src="${item.image}" alt="${item.name}" loading="lazy" width="96" height="96" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                       </div>`
+                    : `<div class="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl flex items-center justify-center shrink-0 group-hover:from-red-100 group-hover:to-orange-100 transition-all duration-300">
+                             <i class="fa-solid ${iconClass} text-blue-600 group-hover:text-red-600 transition-colors text-xl md:text-2xl"></i>
+                           </div>`;
+
+                el.innerHTML = `
+                    ${badge}
+                    <!-- Image or Icon Box -->
+                    ${imageHtml}
+
+                    <!-- Content -->
+                    <div class="flex-1 min-w-0">
+                        <div class="${item.desc ? 'mb-2' : ''}">
+                            <h3 class="text-lg md:text-xl font-bold text-blue-950 group-hover:text-red-600 transition-colors serif ${item.desc ? 'truncate' : 'whitespace-normal'}">${item.name}</h3>
+                            ${item.desc ? `<p class="text-slate-500 text-xs leading-snug line-clamp-2 md:line-clamp-none">${item.desc}</p>` : ''}
+                        </div>
+                        <div class="flex justify-between items-center ${item.desc ? 'mt-2 pt-2 border-t' : 'mt-1'} border-slate-100">
+                            ${priceDisplay}
+                            <div class="md:opacity-0 group-hover:opacity-100 transition-opacity duration-300 ml-2">
+                                <i class="fa-solid fa-arrow-right text-red-600 text-sm md:text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                menuGrid.appendChild(el);
+            });
+        }
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Initialize with burgers
+        const storedLoc = localStorage.getItem('selectedLocation');
+        if (storedLoc) {
+            const locText = storedLoc.replace(/-/g, ' ');
+            const desktopLoc = document.getElementById('display-location');
+            const mobileLoc = document.getElementById('display-location-mobile');
+            if (desktopLoc) desktopLoc.textContent = locText;
+            if (mobileLoc) mobileLoc.textContent = locText;
+        }
+
+        // --- Image Preview Modal Logic ---
+        function openImageModal(src) {
+            const modal = document.getElementById('image-modal');
+            const img = document.getElementById('modal-image');
+            img.src = src;
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeImageModal() {
+            const modal = document.getElementById('image-modal');
+            modal.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+
+        // --- SMART SCROLL NAVBAR (Optimized) ---
+        (function () {
+            const navbar = document.getElementById('navbar');
+            let lastScroll = 0;
+            const scrollThreshold = 10;
+            let ticking = false;
+
+            function updateNavbar() {
+                const currentScroll = window.pageYOffset;
+
+                if (currentScroll <= 0) {
+                    navbar.classList.remove('-translate-y-full');
+                    ticking = false;
+                    return;
+                }
+
+                if (Math.abs(currentScroll - lastScroll) >= scrollThreshold) {
+                    if (currentScroll > lastScroll && currentScroll > 100) {
+                        navbar.classList.add('-translate-y-full');
+                    } else {
+                        navbar.classList.remove('-translate-y-full');
+                    }
+                    lastScroll = currentScroll;
+                }
+
+                ticking = false;
+            }
+
+            window.addEventListener('scroll', () => {
+                if (!ticking) {
+                    window.requestAnimationFrame(updateNavbar);
+                    ticking = true;
+                }
+            }, { passive: true });
+        })();
+
+        filterMenu('burgers');
+    </script>
+    <!-- Image Preview Modal -->
+    <div id="image-modal"
+        class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-black/90 backdrop-blur-sm p-4 cursor-zoom-out"
+        onclick="closeImageModal()">
+        <button class="absolute top-6 right-6 text-white text-3xl hover:scale-110 transition-transform">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <img id="modal-image" src="" alt="Preview" class="max-w-full max-h-full rounded-2xl shadow-2xl cursor-default"
+            onclick="event.stopPropagation()">
+    </div>
+</body>
+
+</html>

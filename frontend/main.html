@@ -1,0 +1,2600 @@
+<!DOCTYPE html>
+<html lang="en"> <!-- Removed 'scroll-smooth' to allow Lenis to take over -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fish Burger Essaouira - Fresh & Spicy Seafood Burgers</title>
+    <meta name="description"
+        content="Experience the authentic taste of Essaouira's port at Fish Burger. Freshly caught seafood, homemade spicy sharmoula, and artisan buns in the heart of the Medina.">
+    <meta name="keywords"
+        content="fish burger, essaouira, seafood restaurant, moroccan food, fresh fish, medina eating">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://fishburger.essaouira/">
+    <meta property="og:title" content="Fish Burger Essaouira - Fresh & Spicy Seafood Burgers">
+    <meta property="og:description"
+        content="Authentic seafood burgers from ocean to table. Visit us in Essaouira's Medina.">
+    <meta property="og:image" content="img/image1story.jpg">
+
+    <!-- Redirection Logic: Enforce index.html as primary entry point -->
+    <script>
+        (function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const locationParam = urlParams.get('location');
+            const storedLocation = localStorage.getItem('selectedLocation');
+
+            // If location is provided in URL, save it
+            if (locationParam) {
+                // Compatibility fix: convert 'casa' to 'casablanca'
+                if (locationParam === 'casa') {
+                    localStorage.setItem('selectedLocation', 'casablanca');
+                } else {
+                    localStorage.setItem('selectedLocation', locationParam);
+                }
+            }
+            // If no location in URL AND no location in localStorage, redirect to index.html
+            else if (!storedLocation) {
+                window.location.href = 'index.html';
+            }
+
+            // Update location display after DOM loads
+            document.addEventListener('DOMContentLoaded', () => {
+                const displayLoc = document.getElementById('display-location');
+                if (displayLoc) {
+                    displayLoc.textContent = localStorage.getItem('selectedLocation') || 'Select Location';
+                }
+            });
+        })();
+    </script>
+
+    <!-- Performance: Preconnect to external origins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://www.gstatic.com">
+    <link rel="dns-prefetch" href="https://js.stripe.com">
+    <link rel="dns-prefetch" href="https://www.google-analytics.com">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        red: {
+                            50: '#fff5f0',
+                            100: '#ffebe0',
+                            200: '#ffd4bf',
+                            300: '#ffb899',
+                            400: '#ff7733',
+                            500: '#FF4500',
+                            600: '#FF4500',
+                            700: '#cc3700',
+                            800: '#992900',
+                            900: '#661c00',
+                            950: '#330e00',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Font Awesome - Async loading for better performance -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    </noscript>
+
+    <!-- Lenis Smooth Scroll - Defer for non-critical rendering -->
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js" defer></script>
+
+    <!-- Fonts: Playfair Display (Headings) & Outfit (Body) - Optimized loading -->
+    <link rel="preload"
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap"
+        as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap"
+            rel="stylesheet">
+    </noscript>
+
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        .serif {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Lenis Recommended CSS */
+        html.lenis {
+            height: auto;
+        }
+
+        .lenis.lenis-smooth {
+            scroll-behavior: auto;
+        }
+
+        .lenis.lenis-smooth [data-lenis-prevent] {
+            overscroll-behavior: contain;
+        }
+
+        .lenis.lenis-stopped {
+            overflow: hidden;
+        }
+
+        .lenis.lenis-scrolling iframe {
+            pointer-events: none;
+        }
+
+        /* Smooth Fade In Animation */
+        .fade-enter {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .fade-enter-active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .nav-hidden {
+            transform: translateY(-101%) !important;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #1e3a8a;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #FF4500;
+        }
+
+
+
+        /* Custom Scrollbar for Cart */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, #3b82f6, #1e40af);
+            border-radius: 10px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(to bottom, #2563eb, #1e3a8a);
+        }
+
+
+        /* Loader */
+        .loader {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 3px solid #fff;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+
+        .loader-dark {
+            border: 3px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top: 3px solid #FF4500;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Gallery Title Gradient Animation */
+        @keyframes gradient-x {
+
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        .animate-gradient-x {
+            background-size: 200% auto;
+            animation: gradient-x 8s ease infinite;
+        }
+
+        /* SVG Draw Animation */
+        @keyframes draw {
+            0% {
+                stroke-dasharray: 0, 200;
+            }
+
+            100% {
+                stroke-dasharray: 200, 0;
+            }
+        }
+
+        .animate-draw {
+            stroke-dasharray: 200;
+            animation: draw 3s ease-in-out infinite;
+        }
+    </style>
+
+    <!-- Structured Data: Restaurant -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Restaurant",
+      "name": "Fish Burger Essaouira",
+      "image": "https://fishburger.essaouira/img/image1story.jpg",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Medina",
+        "addressLocality": "Essaouira",
+        "addressCountry": "MA"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 31.5084,
+        "longitude": -9.7694
+      },
+      "url": "https://fishburger.essaouira",
+      "telephone": "+212600000000",
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+          "opens": "11:30",
+          "closes": "23:30",
+          "description": "Medina & Rooftop"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+          "opens": "11:30",
+          "closes": "21:30",
+          "description": "Casablanca"
+        }
+      ],
+      "servesCuisine": "Seafood, Moroccan, Burger",
+      "priceRange": "$$"
+    }
+    </script>
+</head>
+
+<body
+    class="bg-slate-50 text-slate-800 antialiased selection:bg-red-100 selection:text-red-900 flex flex-col min-h-screen">
+
+    <!-- Main Content Wrapper to push footer down -->
+    <main class="flex-grow">
+        <!-- Navbar -->
+        <nav id="navbar"
+            class="fixed w-full top-0 left-0 z-50 transition-all duration-300 py-6 bg-transparent text-white">
+            <div class="container mx-auto px-6 flex justify-between items-center">
+                <!-- Brand -->
+                <a href="#" class="flex items-center gap-3 group">
+                    <div
+                        class="bg-red-600 text-white w-12 h-12 rounded-full flex items-center justify-center text-xl shadow-lg group-hover:bg-white group-hover:text-red-600 transition-colors">
+                        <i class="fa-solid fa-burger"></i>
+                    </div>
+                    <div class="leading-tight">
+                        <span class="block font-bold text-xl tracking-wider uppercase">FishBurger</span>
+                        <span class="block text-xs font-medium tracking-widest opacity-80">Made In Essaouira</span>
+                    </div>
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center gap-6 font-medium text-sm uppercase tracking-wide">
+                    <!-- Location Badge -->
+                    <div id="location-badge"
+                        class="bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 rounded-full flex items-center gap-2 text-sm font-bold capitalize mr-2">
+                        <i class="fa-solid fa-location-dot text-red-500"></i>
+                        <span id="display-location">...</span>
+                    </div>
+                    <a href="#about" class="hover:text-red-400 transition-colors">The Story</a>
+                    <a href="#gallery" class="hover:text-red-400 transition-colors">Gallery</a>
+                    <a href="#menu" class="hover:text-red-400 transition-colors">Menu</a>
+                    <a href="#ai-chef" class="hover:text-red-400 transition-colors">AI Chef</a>
+                    <!-- Removed Planner link -->
+                    <a href="index.html" class="hover:text-red-400 transition-colors">Order</a>
+                    <a href="#contact"
+                        class="bg-white text-blue-950 px-6 py-2 rounded-full font-bold hover:bg-red-600 hover:text-white transition-all">
+                        Visit Us
+                    </a>
+                    <!-- Language Selector -->
+                    <div class="relative group">
+                        <button onclick="toggleLangDropdown()"
+                            class="bg-white/10 backdrop-blur-md border border-white/20 px-3 py-1.5 rounded-full flex items-center gap-2 text-sm font-bold hover:bg-white/20 transition-all">
+                            <i class="fa-solid fa-globe"></i>
+                            <span id="current-lang-text">EN</span>
+                        </button>
+                        <div id="lang-dropdown"
+                            class="absolute top-full mt-2 right-0 bg-blue-950 border border-white/20 rounded-xl overflow-hidden hidden flex-col w-32 shadow-xl z-50">
+                            <button onclick="setLanguage('en')"
+                                class="px-4 py-2 text-left text-white hover:bg-red-600 transition-colors w-full border-b border-white/10">English</button>
+                            <button onclick="setLanguage('es')"
+                                class="px-4 py-2 text-left text-white hover:bg-red-600 transition-colors w-full border-b border-white/10">Español</button>
+                            <button onclick="setLanguage('ar')"
+                                class="px-4 py-2 text-left text-white hover:bg-red-600 transition-colors w-full border-b border-white/10">العربية</button>
+                            <button onclick="setLanguage('fr')"
+                                class="px-4 py-2 text-left text-white hover:bg-red-600 transition-colors w-full">Français</button>
+                        </div>
+                    </div>
+
+
+
+
+
+
+                    <!-- Hamburger Menu Button -->
+                    <button id="fixed-menu-btn"
+                        class="bg-slate-900/90 backdrop-blur-md border border-slate-700/50 text-white w-10 h-10 rounded-xl flex items-center justify-center hover:bg-slate-800 hover:border-red-500/50 transition-all duration-300 shadow-lg hover:shadow-red-500/20 group">
+                        <i class="fa-solid fa-bars text-base group-hover:text-red-400 transition-colors"></i>
+                    </button>
+                </div>
+
+                <!-- Mobile Toggle -->
+                <div class="flex items-center md:hidden gap-4">
+
+                    <!-- Mobile Language Selector -->
+                    <div class="relative">
+                        <button onclick="toggleMobileLangDropdown()"
+                            class="bg-white/10 backdrop-blur-md border border-white/20 w-10 h-10 rounded-full flex items-center justify-center text-white hover:bg-white/20 transition-all">
+                            <i class="fa-solid fa-globe text-sm"></i>
+                        </button>
+                        <div id="mobile-lang-dropdown"
+                            class="absolute top-full mt-2 right-0 bg-blue-950 border border-white/20 rounded-xl overflow-hidden hidden flex-col w-32 shadow-xl z-50">
+                            <button onclick="setLanguage('en')"
+                                class="px-4 py-2 text-left text-white hover:bg-red-600 transition-colors w-full border-b border-white/10 text-sm">English</button>
+                            <button onclick="setLanguage('es')"
+                                class="px-4 py-2 text-left text-white hover:bg-red-600 transition-colors w-full border-b border-white/10 text-sm">Español</button>
+                            <button onclick="setLanguage('ar')"
+                                class="px-4 py-2 text-left text-white hover:bg-red-600 transition-colors w-full border-b border-white/10 text-sm">العربية</button>
+                            <button onclick="setLanguage('fr')"
+                                class="px-4 py-2 text-left text-white hover:bg-red-600 transition-colors w-full text-sm">Français</button>
+                        </div>
+                    </div>
+
+                    <button id="mobile-menu-btn" class="text-white focus:outline-none flex items-center">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+
+        </nav>
+
+
+
+        <!-- Hero Section -->
+        <header class="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden bg-blue-950">
+            <!-- Creative Animated Background -->
+            <div class="absolute inset-0 z-0 overflow-hidden">
+                <!-- Animated Gradient Background -->
+                <div
+                    class="absolute inset-0 bg-gradient-to-br from-blue-950 via-slate-900 to-blue-900 animate-gradient">
+                </div>
+
+                <!-- Geometric Pattern Overlay -->
+                <div class="absolute inset-0 opacity-10">
+                    <div class="absolute inset-0" style="background-image: 
+                    radial-gradient(circle at 20% 50%, rgba(239, 68, 68, 0.3) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 80%, rgba(59, 130, 246, 0.3) 0%, transparent 50%),
+                    radial-gradient(circle at 40% 20%, rgba(251, 146, 60, 0.2) 0%, transparent 50%);
+                    background-size: 100% 100%;
+                    animation: float 20s ease-in-out infinite;">
+                    </div>
+                </div>
+
+                <!-- Dot Pattern -->
+                <div class="absolute inset-0 opacity-5" style="background-image: radial-gradient(circle, white 1px, transparent 1px); 
+                background-size: 40px 40px;">
+                </div>
+
+                <!-- Floating Circles -->
+                <div class="absolute top-20 left-10 w-32 h-32 bg-red-500/10 rounded-full blur-3xl animate-float-slow">
+                </div>
+                <div
+                    class="absolute bottom-20 right-20 w-40 h-40 bg-orange-500/10 rounded-full blur-3xl animate-float-slower">
+                </div>
+                <div class="absolute top-1/2 right-10 w-24 h-24 bg-blue-400/10 rounded-full blur-2xl animate-float">
+                </div>
+
+                <!-- FishBurger Background Image -->
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <img src="img/bakgroundfishburger.png" alt="FishBurger" fetchpriority="high" width="1920"
+                        height="1080" class="w-full h-full object-cover opacity-90">
+                </div>
+
+                <!-- Gradient Vignette -->
+                <div
+                    class="absolute inset-0 bg-gradient-to-t from-blue-950/80 via-transparent to-blue-950/50 pointer-events-none">
+                </div>
+                <div
+                    class="absolute inset-0 bg-gradient-to-r from-blue-950/60 via-transparent to-blue-950/60 pointer-events-none">
+                </div>
+            </div>
+
+            <!-- Add animations in style tag -->
+            <style>
+                @keyframes gradient {
+
+                    0%,
+                    100% {
+                        background-position: 0% 50%;
+                    }
+
+                    50% {
+                        background-position: 100% 50%;
+                    }
+                }
+
+                @keyframes float {
+
+                    0%,
+                    100% {
+                        transform: translateY(0px) translateX(0px);
+                    }
+
+                    33% {
+                        transform: translateY(-20px) translateX(10px);
+                    }
+
+                    66% {
+                        transform: translateY(10px) translateX(-10px);
+                    }
+                }
+
+                @keyframes float-slow {
+
+                    0%,
+                    100% {
+                        transform: translateY(0px) scale(1);
+                    }
+
+                    50% {
+                        transform: translateY(-30px) scale(1.1);
+                    }
+                }
+
+                @keyframes float-slower {
+
+                    0%,
+                    100% {
+                        transform: translateY(0px) translateX(0px) scale(1);
+                    }
+
+                    50% {
+                        transform: translateY(20px) translateX(-20px) scale(1.15);
+                    }
+                }
+
+                .animate-gradient {
+                    background-size: 200% 200%;
+                    animation: gradient 15s ease infinite;
+                    will-change: background-position;
+                }
+
+                .animate-float {
+                    animation: float 8s ease-in-out infinite;
+                    will-change: transform;
+                }
+
+                .animate-float-slow {
+                    animation: float-slow 12s ease-in-out infinite;
+                    will-change: transform;
+                }
+
+                .animate-float-slower {
+                    animation: float-slower 15s ease-in-out infinite;
+                    will-change: transform;
+                }
+            </style>
+
+            <!-- Content -->
+            <div class="relative z-10 container mx-auto px-6 grid md:grid-cols-2 gap-12 items-center pt-20">
+                <div class="fade-enter-active">
+                    <div class="flex items-center gap-3 mb-6">
+                        <span class="h-px w-12 bg-red-500"></span>
+                        <span class="text-red-400 font-bold tracking-widest uppercase text-sm">Essaouira</span>
+                    </div>
+                    <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold text-white leading-none mb-8">
+                        Ocean to <br /> <span
+                            class="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-orange-400">Table.</span>
+                    </h1>
+                    <p class="text-blue-100 text-lg md:text-xl leading-relaxed mb-10 max-w-lg">
+                        Experience the authentic taste of Essaouira's local seafood, homemade sauce and soft delicious
+                        buns
+                        .
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="index.html"
+                            class="bg-red-600 hover:bg-red-700 text-white px-10 py-4 rounded-full font-bold text-lg transition-all shadow-lg shadow-red-600/30 flex items-center justify-center gap-3">
+                            Order Now <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                        <a href="#ai-chef"
+                            class="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white border border-white/30 px-10 py-4 rounded-full font-bold text-lg transition-all flex items-center justify-center gap-3 group">
+                            <i
+                                class="fa-solid fa-wand-magic-sparkles text-yellow-400 group-hover:scale-110 transition-all duration-300"></i>
+                            Ask AI Chef
+                        </a>
+                    </div>
+                </div>
+        </header>
+
+
+
+        <!-- Story Section (2 Images) -->
+        <section id="about" class="py-24 bg-white relative overflow-hidden">
+            <!-- Decor Text -->
+            <span
+                class="absolute top-20 right-0 text-9xl font-bold text-slate-50 select-none -z-10 font-serif opacity-50">STORY</span>
+
+            <div class="container mx-auto px-6">
+                <div class="flex flex-col lg:flex-row items-center gap-16">
+                    <!-- Image Grid -->
+                    <div class="lg:w-1/2 relative">
+                        <div class="grid grid-cols-2 gap-4">
+                            <!-- Video 1 -->
+                            <div class="rounded-3xl w-full h-80 lg:h-[500px] overflow-hidden relative shadow-xl">
+                                <video data-src="story/Video Project.mp4" loop muted playsinline webkit-playsinline
+                                    preload="none" poster="img/IMG_7651_poster.jpg"
+                                    class="w-full h-full object-cover scale-[1.7] lazy-video"
+                                    style="object-fit: cover; transform-origin: center;"></video>
+                            </div>
+                            <!-- Video 2 -->
+                            <div class="rounded-3xl w-full h-80 lg:h-[500px] overflow-hidden relative mt-12 shadow-xl">
+                                <video data-src="story/IMG_4690 (1).mp4" loop muted playsinline webkit-playsinline
+                                    preload="none" poster="img/IMG_7584_poster.jpg"
+                                    class="w-full h-full object-cover scale-[1.7] lazy-video"
+                                    style="object-fit: cover; transform-origin: center;"></video>
+                            </div>
+                        </div>
+                        <!-- Central Badge -->
+                        <div
+                            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-blue-950 text-white p-4 md:p-6 rounded-full w-24 h-24 md:w-32 md:h-32 flex flex-col items-center justify-center border-2 md:border-4 border-white shadow-xl z-10">
+                            <span class="font-bold text-xl md:text-3xl">100%</span>
+                            <span class="text-[8px] md:text-xs uppercase tracking-widest text-red-400">Local</span>
+                        </div>
+                    </div>
+
+                    <!-- Text -->
+                    <div class="lg:w-1/2">
+                        <h2 class="text-2xl md:text-3xl lg:text-5xl font-bold text-blue-950 mb-6 leading-tight">
+                            Fishburger was born out of a simple <span
+                                class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500">Market
+                                gap</span> and a simple recipe.
+                        </h2>
+
+                        <div class="space-y-4 md:space-y-6 text-slate-600 text-base md:text-lg leading-relaxed">
+                            <p>
+                                In 2022, while living in Essaouira, the founder noticed a gap in the market. If you
+                                wanted
+                                fish,
+                                your choices were either cheap and basic or overpriced and fancy. There was no fun,
+                                affordable
+                                middle ground for fresh, vibrant pescatarian food.
+                            </p>
+                            <p>
+                                So, he started cooking for himself, using family recipes passed down from his mum.
+                            </p>
+                            <p>
+                                Along with a group of talented artists, they transformed a rundown corner of the Medina
+                                into
+                                a
+                                flagship restaurant full of colour, character, and care which opened its doors
+                                officially on
+                                16th November 2022. It quickly became known for being quirky, welcoming, and proudly
+                                different.
+                            </p>
+                            <p>
+                                Now with 2 locations and a growing team, Fishburger continues to shake up the food
+                                scene—bringing fresh, local fish and bold ideas to everyone who walks through our doors.
+                            </p>
+
+                            <div class="pt-4 lg:pt-6">
+                                <p class="mb-3 italic text-slate-500 font-medium">From the very first burger to every
+                                    new
+                                    opening, one thing
+                                    stays the same:</p>
+                                <h3
+                                    class="text-2xl lg:text-3xl font-black text-blue-950 uppercase tracking-wider leading-tight">
+                                    Local fish. <span class="text-blue-700">Global vibes.</span> <br />
+                                    <span
+                                        class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500">Big
+                                        flavours.</span>
+                                </h3>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Swimming Fish Animation - Full Width Divider -->
+        <div class="relative w-full h-16 pointer-events-none overflow-hidden flex items-center -mb-8 z-20 bg-white">
+            <div class="w-full overflow-hidden relative h-12">
+                <div class="flex gap-16 whitespace-nowrap animate-swim-line w-max">
+                    <div class="flex gap-12 px-10">
+                        <i class="fa-solid fa-fish text-2xl animate-wiggle opacity-80" style="color: #17256A;"></i>
+                        <i class="fa-solid fa-fish-fins text-3xl animate-wiggle-alt opacity-75"
+                            style="color: #17256A;"></i>
+                        <i class="fa-solid fa-fish text-2xl animate-wiggle opacity-90" style="color: #17256A;"></i>
+                        <i class="fa-solid fa-fish-fins text-3xl animate-wiggle-alt opacity-70"
+                            style="color: #17256A;"></i>
+                        <i class="fa-solid fa-fish text-4xl animate-wiggle opacity-80" style="color: #17256A;"></i>
+                        <i class="fa-solid fa-fish-fins text-2xl animate-wiggle-alt opacity-75"
+                            style="color: #17256A;"></i>
+                        <i class="fa-solid fa-fish text-3xl animate-wiggle opacity-90" style="color: #17256A;"></i>
+                        <i class="fa-solid fa-fish text-4xl animate-wiggle-alt opacity-70" style="color: #17256A;"></i>
+                        <i class="fa-solid fa-fish-fins text-2xl animate-wiggle opacity-80" style="color: #17256A;"></i>
+                        <i class="fa-solid fa-fish text-3xl animate-wiggle-alt opacity-75" style="color: #17256A;"></i>
+                        <i class="fa-solid fa-fish-fins text-4xl animate-wiggle opacity-90" style="color: #17256A;"></i>
+                        <i class="fa-solid fa-fish text-2xl animate-wiggle-alt opacity-70" style="color: #17256A;"></i>
+                    </div>
+                    <!-- Duplicate for seamless loop -->
+                    <div class="flex gap-12 px-10">
+                        <i class="fa-solid fa-fish text-2xl animate-wiggle opacity-80" style="color: #17256A;"></i>
+                        <i class="fa-solid fa-fish-fins text-3xl animate-wiggle-alt opacity-75"
+                            style="color: #17256A;"></i>
+                        <i class="fa-solid fa-fish text-2xl animate-wiggle opacity-90" style="color: #17256A;"></i>
+                        <i class="fa-solid fa-fish-fins text-3xl animate-wiggle-alt opacity-70"
+                            style="color: #17256A;"></i>
+                        <i class="fa-solid fa-fish text-4xl animate-wiggle opacity-80" style="color: #17256A;"></i>
+                        <i class="fa-solid fa-fish-fins text-2xl animate-wiggle-alt opacity-75"
+                            style="color: #17256A;"></i>
+                        <i class="fa-solid fa-fish text-3xl animate-wiggle opacity-90" style="color: #17256A;"></i>
+                        <i class="fa-solid fa-fish text-4xl animate-wiggle-alt opacity-70" style="color: #17256A;"></i>
+                        <i class="fa-solid fa-fish-fins text-2xl animate-wiggle opacity-80" style="color: #17256A;"></i>
+                        <i class="fa-solid fa-fish text-3xl animate-wiggle-alt opacity-75" style="color: #17256A;"></i>
+                        <i class="fa-solid fa-fish-fins text-4xl animate-wiggle opacity-90" style="color: #17256A;"></i>
+                        <i class="fa-solid fa-fish text-2xl animate-wiggle-alt opacity-70" style="color: #17256A;"></i>
+                    </div>
+                    <!-- Extra duplicate for more icons -->
+                    <div class="flex gap-12 px-10">
+                        <i class="fa-solid fa-fish text-2xl animate-wiggle opacity-80" style="color: #17256A;"></i>
+                        <i class="fa-solid fa-fish-fins text-3xl animate-wiggle-alt opacity-75"
+                            style="color: #17256A;"></i>
+                        <i class="fa-solid fa-fish text-2xl animate-wiggle opacity-90" style="color: #17256A;"></i>
+                        <i class="fa-solid fa-fish-fins text-3xl animate-wiggle-alt opacity-70"
+                            style="color: #17256A;"></i>
+                        <i class="fa-solid fa-fish text-4xl animate-wiggle opacity-80" style="color: #17256A;"></i>
+                        <i class="fa-solid fa-fish-fins text-2xl animate-wiggle-alt opacity-75"
+                            style="color: #17256A;"></i>
+                        <i class="fa-solid fa-fish text-3xl animate-wiggle opacity-90" style="color: #17256A;"></i>
+                        <i class="fa-solid fa-fish text-4xl animate-wiggle-alt opacity-70" style="color: #17256A;"></i>
+                        <i class="fa-solid fa-fish-fins text-2xl animate-wiggle opacity-80" style="color: #17256A;"></i>
+                        <i class="fa-solid fa-fish text-3xl animate-wiggle-alt opacity-75" style="color: #17256A;"></i>
+                        <i class="fa-solid fa-fish-fins text-4xl animate-wiggle opacity-90" style="color: #17256A;"></i>
+                        <i class="fa-solid fa-fish text-2xl animate-wiggle-alt opacity-70" style="color: #17256A;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gallery Section - Modern Horizontal Bento Slider -->
+        <section id="gallery" class="py-24 bg-white relative overflow-hidden"
+            style="content-visibility: auto; contain-intrinsic-size: 1px 1000px;">
+            <!-- Decorative subtle background -->
+            <div class="absolute inset-0 opacity-[0.03] pointer-events-none">
+                <div class="absolute inset-0"
+                    style="background-image: radial-gradient(#1e3a8a 2px, transparent 2px); background-size: 60px 60px;">
+                </div>
+            </div>
+
+
+            <div class="container mx-auto px-6 relative z-10 text-center">
+                <!-- Section Header -->
+                <div class="flex flex-col items-center justify-center mb-12">
+
+                    <style>
+                        @keyframes swim-line {
+                            0% {
+                                transform: translateX(-50%);
+                            }
+
+                            100% {
+                                transform: translateX(0);
+                            }
+                        }
+
+                        @keyframes wiggle {
+
+                            0%,
+                            100% {
+                                transform: rotate(-5deg) translateY(0);
+                            }
+
+                            50% {
+                                transform: rotate(5deg) translateY(-3px);
+                            }
+                        }
+
+                        @keyframes wiggle-alt {
+
+                            0%,
+                            100% {
+                                transform: rotate(5deg) translateY(-2px);
+                            }
+
+                            50% {
+                                transform: rotate(-5deg) translateY(2px);
+                            }
+                        }
+
+                        .animate-swim-line {
+                            animation: swim-line 30s linear infinite;
+                        }
+
+                        .animate-wiggle {
+                            animation: wiggle 3s ease-in-out infinite;
+                        }
+
+                        .animate-wiggle-alt {
+                            animation: wiggle-alt 4s ease-in-out infinite;
+                        }
+                    </style>
+
+                    <!-- Enhanced Badge with Glassmorphism -->
+                    <div
+                        class="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-red-50 via-orange-50 to-red-50 backdrop-blur-xl rounded-full border-2 border-red-200/50 mb-8 shadow-lg shadow-red-100/50 hover:shadow-xl hover:shadow-red-200/60 transition-all duration-500 group">
+                        <span
+                            class="w-2.5 h-2.5 bg-gradient-to-r from-red-500 to-orange-500 rounded-full animate-pulse shadow-lg shadow-red-500/50"></span>
+                        <span
+                            class="text-transparent bg-clip-text bg-gradient-to-r from-red-600 via-red-700 to-orange-600 font-black tracking-[0.25em] uppercase text-xs">The
+                            Visual
+                            Experience</span>
+                        <i
+                            class="fa-solid fa-sparkles text-red-500 text-xs opacity-70 group-hover:opacity-100 transition-opacity"></i>
+                    </div>
+
+                    <!-- Enhanced Main Title with Gradient & Animation -->
+                    <h2
+                        class="text-5xl md:text-6xl lg:text-7xl font-bold mb-8 font-serif tracking-tight leading-[0.95] relative">
+                        <span class="block text-blue-950 mb-2">Life at</span>
+                        <span class="relative inline-block group">
+                            <span
+                                class="text-transparent bg-clip-text bg-gradient-to-r from-blue-950 via-red-600 to-blue-950 animate-gradient-x">
+                                Fishburger
+                            </span>
+
+                            <!-- Decorative Dots -->
+                            <span
+                                class="absolute -left-8 top-1/2 -translate-y-1/2 w-3 h-3 bg-red-500/20 rounded-full hidden md:block"></span>
+                            <span
+                                class="absolute -right-8 top-1/2 -translate-y-1/2 w-3 h-3 bg-red-500/20 rounded-full hidden md:block"></span>
+                        </span>
+                    </h2>
+
+                    <!-- Enhanced Description -->
+                    <p class="text-slate-600 text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed font-light mb-8">
+                        A glimpse into our <span class="font-semibold text-blue-950">kitchen</span>, our <span
+                            class="font-semibold text-blue-950">port</span>, and the <span
+                            class="font-semibold text-red-600">soul</span> of Essaouira's finest seafood.
+                    </p>
+
+                    <!-- Action Buttons -->
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <!-- Instagram Button -->
+                        <a href="https://instagram.com/fishburger.essaouira" target="_blank" rel="noopener noreferrer"
+                            class="inline-flex items-center justify-center gap-0 md:gap-3 w-14 h-14 md:w-auto md:h-auto p-0 md:px-8 md:py-4 bg-gradient-to-r from-purple-600 via-pink-500 to-orange-400 text-white font-bold rounded-full shadow-lg shadow-pink-500/30 hover:shadow-xl hover:shadow-pink-500/40 hover:scale-105 transition-all duration-300 group">
+                            <i class="fa-brands fa-instagram text-2xl group-hover:rotate-12 transition-transform"></i>
+                            <span class="hidden md:inline uppercase tracking-wide text-sm">Follow on Instagram</span>
+                            <i
+                                class="hidden md:inline fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+
+                        <!-- TikTok Button -->
+                        <a href="https://www.tiktok.com/@fishburgeressaouira?_r=1&_t=ZS-93cKBvmddP3" target="_blank"
+                            rel="noopener noreferrer"
+                            class="inline-flex items-center justify-center gap-0 md:gap-3 w-14 h-14 md:w-auto md:h-auto p-0 md:px-8 md:py-4 bg-slate-950 text-white font-bold rounded-full shadow-lg shadow-slate-900/30 hover:shadow-xl hover:shadow-slate-900/40 hover:scale-105 transition-all duration-300 group">
+                            <i class="fa-brands fa-tiktok text-2xl group-hover:rotate-12 transition-transform"></i>
+                            <span class="hidden md:inline uppercase tracking-wide text-sm">Follow on TikTok</span>
+                            <i
+                                class="hidden md:inline fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+
+                        <!-- Facebook Button -->
+                        <a href="https://www.facebook.com/p/Fishburger-Essaouira-100087049917638/" target="_blank"
+                            rel="noopener noreferrer"
+                            class="inline-flex items-center justify-center gap-0 md:gap-3 w-14 h-14 md:w-auto md:h-auto p-0 md:px-8 md:py-4 bg-blue-600 text-white font-bold rounded-full shadow-lg shadow-blue-600/30 hover:shadow-xl hover:shadow-blue-600/40 hover:scale-105 transition-all duration-300 group">
+                            <i class="fa-brands fa-facebook-f text-2xl group-hover:rotate-12 transition-transform"></i>
+                            <span class="hidden md:inline uppercase tracking-wide text-sm">Follow on Facebook</span>
+                            <i
+                                class="hidden md:inline fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+
+                        <!-- Google Reviews Button -->
+                        <a href="https://www.google.com/maps/search/?api=1&query=Fishburger+Essaouira+Morocco"
+                            target="_blank" rel="noopener noreferrer"
+                            class="inline-flex items-center justify-center gap-0 md:gap-3 w-14 h-14 md:w-auto md:h-auto p-0 md:px-8 md:py-4 bg-white text-slate-800 font-bold rounded-full shadow-lg shadow-slate-200/50 hover:shadow-xl hover:scale-105 transition-all duration-300 group border border-slate-100">
+                            <i
+                                class="fa-brands fa-google text-2xl text-[#4285F4] group-hover:rotate-12 transition-transform"></i>
+                            <div class="hidden md:flex flex-col items-start leading-tight">
+                                <span class="uppercase tracking-wide text-[10px] text-slate-500">Rate us on</span>
+                                <span class="text-sm">Google Reviews</span>
+                            </div>
+                            <div class="hidden md:flex gap-0.5 text-[#FBBC05] text-[10px]">
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            </div>
+
+            <!-- Horizontal Scroll Container -->
+            <div class="relative w-full">
+                <div id="bento-slider" class="flex gap-4 md:gap-6 px-4 md:px-6 pb-8 md:pb-12"
+                    style="overflow-x: scroll; overflow-y: hidden; -webkit-overflow-scrolling: touch; scroll-snap-type: x mandatory; scroll-behavior: smooth;">
+
+
+                    <div
+                        class="flex-shrink-0 w-[85vw] md:w-[480px] h-[300px] md:h-[380px] snap-center md:snap-start group relative overflow-hidden rounded-[2rem] md:rounded-[3rem] bg-slate-900 border border-slate-200 shadow-2xl section-video-container">
+                        <video data-src="./video/IMG_2134.mp4" width="480" height="380" loop muted playsinline
+                            preload="none" poster="img/IMG_7651_poster.jpg" x-webkit-airplay="allow"
+                            disablePictureInPicture class="w-full h-full object-cover lazy-video"
+                            style="transform: translateZ(0);" data-gallery-video></video>
+                        <div class="absolute inset-0 bg-gradient-to-br from-red-600/30 via-transparent to-black/60">
+                        </div>
+                        <div class="absolute top-6 md:top-8 right-6 md:right-8">
+                            <div
+                                class="w-12 h-12 md:w-16 md:h-16 bg-white/20 backdrop-blur-xl rounded-2xl flex items-center justify-center border border-white/20 shadow-2xl">
+                                <i class="fa-solid fa-play text-white text-lg md:text-2xl"></i>
+                            </div>
+                        </div>
+                        <div class="absolute bottom-6 md:bottom-10 left-6 md:left-10 right-6 md:right-10">
+                            <div
+                                class="inline-block px-3 py-1 md:px-4 md:py-1 bg-red-600 rounded-full text-white text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] mb-3 md:mb-4 shadow-lg">
+                                Behind the Scenes</div>
+                            <h3 class="text-2xl md:text-5xl font-bold text-white mb-2 font-serif">Essaouira Vibes</h3>
+                            <p class="text-white/80 max-w-sm text-xs md:text-base">Authentic moments captured in the
+                                heart
+                                of our
+                                kitchen.</p>
+                        </div>
+                    </div>
+
+                    <!-- Card 5.2: Fresh Finds (IMG_0837) -->
+                    <div
+                        class="flex-shrink-0 w-[70vw] md:w-[320px] h-[300px] md:h-[380px] snap-center md:snap-start group relative overflow-hidden rounded-[2rem] md:rounded-[3rem] bg-slate-900 shadow-2xl">
+                        <img src="img/IMG_0837.webp" alt="Local Essaouira Catch" loading="lazy" fetchpriority="low"
+                            width="320" height="380"
+                            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                        <div
+                            class="absolute inset-x-0 bottom-0 p-6 md:p-10 bg-gradient-to-t from-black/80 via-black/20 to-transparent">
+                            <div class="flex items-center gap-3 mb-2 md:mb-3">
+                                <span class="w-6 md:w-8 h-px bg-red-500"></span>
+                                <span
+                                    class="text-red-400 font-bold text-[10px] md:text-xs uppercase tracking-widest">Essaouira</span>
+                            </div>
+                            <h4 class="text-xl md:text-4xl font-bold text-white font-serif">The Local Catch</h4>
+                            <p class="text-slate-300 mt-1 md:mt-2 text-xs md:text-base">Sourced daily from the blue
+                                boats of
+                                the
+                                port.</p>
+                        </div>
+                    </div>
+
+                    <!-- Card 5.3: Medina Vibes (IMG_0815) -->
+                    <div
+                        class="flex-shrink-0 w-[60vw] md:w-[280px] h-[300px] md:h-[380px] snap-center md:snap-start group relative overflow-hidden rounded-[2rem] md:rounded-[3rem] bg-slate-950 shadow-2xl">
+                        <img src="img/IMG_0815.webp" alt="Medina Essaouira Secrets" loading="lazy" fetchpriority="low"
+                            width="280" height="380"
+                            class="parallax-scroll-img w-full h-full object-cover brightness-110 saturate-[1.1]">
+                        <div
+                            class="absolute inset-x-0 bottom-0 p-6 md:p-10 bg-gradient-to-t from-black/80 via-black/20 to-transparent">
+                            <div class="flex items-center gap-3 mb-2 md:mb-3">
+                                <span class="w-6 md:w-8 h-px bg-red-500"></span>
+                                <span
+                                    class="text-red-400 font-bold text-[10px] md:text-xs uppercase tracking-widest">Atmosphere</span>
+                            </div>
+                            <h4 class="text-xl md:text-4xl font-bold text-white font-serif">Medina Secrets</h4>
+                            <p class="text-slate-300 mt-1 md:mt-2 text-xs md:text-base">Where the soul of the city meets
+                                our
+                                kitchen.</p>
+                        </div>
+                    </div>
+
+                    <!-- Card 5.4: Culinary Art (IMG_0599 Video) -->
+                    <div
+                        class="flex-shrink-0 w-[80vw] md:w-[360px] h-[300px] md:h-[380px] snap-center md:snap-start group relative overflow-hidden rounded-[2rem] md:rounded-[3rem] bg-black shadow-2xl">
+                        <video data-src="video/IMG_0599 (2).mp4" width="1280" height="720" loop muted playsinline
+                            preload="none" poster="img/IMG_7651_poster.jpg" x-webkit-airplay="allow"
+                            disablePictureInPicture
+                            class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-300 lazy-video"
+                            style="transform: translateZ(0);" data-gallery-video></video>
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none">
+                        </div>
+                        <div class="absolute top-6 md:top-8 right-6 md:right-8 z-30">
+                            <div
+                                class="bg-red-600 text-white px-3 py-1 md:px-4 md:py-1.5 rounded-full text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] shadow-lg flex items-center gap-2">
+                                <span class="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></span>
+                                Live Kitchen
+                            </div>
+                        </div>
+                        <div
+                            class="absolute bottom-6 md:bottom-10 left-6 md:left-10 right-6 md:right-10 text-white z-30">
+                            <h4 class="text-xl md:text-4xl font-bold font-serif">Kitchen Soul</h4>
+                            <p class="text-white/70 mt-1 md:mt-2 text-xs md:text-base">Witness the passion behind every
+                                plate.</p>
+                        </div>
+                    </div>
+
+                    <!-- Card 5.5: Birthday Celebration (IMG_1184) -->
+                    <div
+                        class="flex-shrink-0 w-[70vw] md:w-[320px] h-[300px] md:h-[380px] snap-center md:snap-start group relative overflow-hidden rounded-[2rem] md:rounded-[3rem] shadow-2xl">
+                        <img src="img/IMG_1184.webp" alt="FishBurger Birthday Celebration" loading="lazy"
+                            fetchpriority="low" width="320" height="380"
+                            class="parallax-scroll-img w-full h-full object-cover brightness-110 saturate-[1.1]">
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none">
+                        </div>
+
+                        <div class="absolute bottom-6 md:bottom-8 left-5 md:left-6 right-5 md:right-6 text-white z-30">
+                            <h3 class="text-2xl md:text-3xl font-bold mb-1 md:mb-2 font-serif leading-tight">Fishburger
+                                Birthday</h3>
+                            <p class="text-white/80 text-xs md:text-sm leading-relaxed">Celebrating years of flavor and
+                                community in
+                                Essaouira.</p>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+
+            <style>
+                .hide-scrollbar::-webkit-scrollbar {
+                    display: none;
+                }
+
+                .hide-scrollbar {
+                    -ms-overflow-style: none;
+                    scrollbar-width: none;
+                }
+
+                /* Performance optimizations */
+                #bento-slider {
+                    will-change: scroll-position;
+                    -webkit-overflow-scrolling: touch;
+                }
+
+                .snap-start {
+                    content-visibility: auto;
+                    contain-intrinsic-size: 380px;
+                    contain: layout style paint;
+                }
+
+                /* Image optimization */
+                #bento-slider img {
+                    will-change: transform;
+                }
+
+                /* Video optimization */
+                #bento-slider video {
+                    transform: translateZ(0);
+                    -webkit-transform: translateZ(0);
+                    backface-visibility: hidden;
+                    -webkit-backface-visibility: hidden;
+                }
+
+                /* Smooth 2D Scroll Animation */
+                /* Smooth 2D Scroll Animation */
+                .parallax-scroll-img {
+                    opacity: 1;
+                    /* FAILSAFE: Ensure visible by default */
+                    transform: scale(1) translateY(0);
+                    will-change: transform;
+                    display: block;
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    /* Ensure no blur filters */
+                    filter: none;
+                    image-rendering: auto;
+                    /* Default high quality */
+                    transition: transform 0.1s linear;
+                }
+
+                .parallax-scroll-img.is-visible {
+                    opacity: 1;
+                }
+            </style>
+
+            <script>
+                const slider = document.getElementById('bento-slider');
+                const progress = document.getElementById('bento-progress');
+                let isTicking = false;
+
+                // Throttled scroll listener with passive flag for better performance
+                slider.addEventListener('scroll', () => {
+                    if (!isTicking) {
+                        window.requestAnimationFrame(() => {
+                            const maxScroll = slider.scrollWidth - slider.clientWidth;
+                            if (maxScroll > 0 && progress) {
+                                const percentage = (slider.scrollLeft / maxScroll) * 100;
+                                progress.style.width = percentage + '%';
+                            }
+                            isTicking = false;
+                        });
+                        isTicking = true;
+                    }
+                }, { passive: true });
+
+                function scrollBento(direction) {
+                    const scrollAmount = window.innerWidth * 0.7;
+                    slider.style.scrollSnapType = 'none';
+
+                    slider.scrollBy({
+                        left: direction === 'left' ? -scrollAmount : scrollAmount,
+                        behavior: 'smooth'
+                    });
+
+                    clearTimeout(window.scrollTimeout);
+                    window.scrollTimeout = setTimeout(() => {
+                        slider.style.scrollSnapType = 'x mandatory';
+                    }, 600);
+                }
+
+                // Optimized video controller - play videos when in view
+                const videoObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        const video = entry.target;
+
+                        if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+                            if (video.paused) {
+                                video.play().catch(err => {
+                                    console.warn('Video playback failed:', err);
+                                });
+                            }
+                        }
+                    });
+                }, {
+                    threshold: [0.5],
+                    rootMargin: '100px'
+                });
+
+                // Observe all videos
+                document.querySelectorAll('#bento-slider video').forEach(v => {
+                    videoObserver.observe(v);
+                    v.pause();
+                });
+
+                // Initial progress calculation
+                if (progress) {
+                    window.addEventListener('load', () => {
+                        const maxScroll = slider.scrollWidth - slider.clientWidth;
+                        if (maxScroll > 0) {
+                            progress.style.width = (slider.scrollLeft / maxScroll) * 100 + '%';
+                        }
+                    });
+                }
+            </script>
+        </section>
+
+        <!-- AI Chef Section (Interactive) -->
+        <section id="ai-chef" class="py-20 bg-blue-950 relative overflow-hidden">
+            <!-- Background Pattern -->
+            <div class="absolute inset-0 opacity-10"
+                style="background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 30px 30px;"></div>
+
+            <div class="container mx-auto px-6 relative z-10">
+                <div
+                    class="bg-gradient-to-br from-blue-900 to-blue-950 border border-blue-800 rounded-3xl p-8 md:p-16 shadow-2xl flex flex-col lg:flex-row items-center gap-12">
+
+                    <div class="lg:w-1/2 text-white">
+                        <div
+                            class="inline-block bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest mb-4">
+                            New Feature</div>
+                        <h2 class="text-4xl font-bold mb-4">Can't Decide? <br /> Ask our AI Chef.</h2>
+                        <p class="text-blue-200 text-lg mb-8">
+                            Tell us what you're craving—spicy, crunchy, light, or super hungry—and our AI Chef
+                            will curate the perfect meal from our menu.
+                        </p>
+                        <div class="flex items-center gap-4 text-sm text-blue-300">
+                            <i class="fa-solid fa-fish text-lg"></i> Powered by FishBurger
+                        </div>
+                    </div>
+
+                    <div class="lg:w-1/2 w-full">
+                        <div class="bg-white rounded-2xl p-6 shadow-xl">
+                            <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Your
+                                Craving</label>
+                            <div class="relative">
+                                <input type="text" id="user-craving"
+                                    placeholder="e.g. I want something spicy and crunchy..."
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all"
+                                    onkeydown="if(event.key === 'Enter') getChefRecommendation()">
+                                <button onclick="getChefRecommendation()" id="ask-btn"
+                                    class="absolute right-2 top-2 bottom-2 bg-red-600 hover:bg-red-700 text-white px-6 rounded-lg font-bold transition-colors flex items-center justify-center min-w-[100px]">
+                                    <span id="btn-text">Ask</span>
+                                    <div id="btn-loader" class="loader hidden"></div>
+                                </button>
+                            </div>
+
+                            <!-- Example Questions -->
+                            <div class="mt-4">
+                                <p class="text-xs text-slate-400 mb-2 uppercase tracking-wider">Try asking:</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <button
+                                        onclick="document.getElementById('user-craving').value='I want something spicy and crunchy'; getChefRecommendation();"
+                                        class="text-xs bg-slate-100 hover:bg-red-50 text-slate-700 hover:text-red-600 px-3 py-2 rounded-full border border-slate-200 hover:border-red-300 transition-all">
+                                        <i class="fa-solid fa-pepper-hot text-red-500"></i> Spicy & crunchy
+                                    </button>
+                                    <button
+                                        onclick="document.getElementById('user-craving').value='What is your best seller?'; getChefRecommendation();"
+                                        class="text-xs bg-slate-100 hover:bg-red-50 text-slate-700 hover:text-red-600 px-3 py-2 rounded-full border border-slate-200 hover:border-red-300 transition-all">
+                                        <i class="fa-solid fa-star text-yellow-500"></i> Best seller
+                                    </button>
+                                    <button
+                                        onclick="document.getElementById('user-craving').value='I am very hungry, what do you recommend?'; getChefRecommendation();"
+                                        class="text-xs bg-slate-100 hover:bg-red-50 text-slate-700 hover:text-red-600 px-3 py-2 rounded-full border border-slate-200 hover:border-red-300 transition-all">
+                                        <i class="fa-solid fa-burger text-orange-600"></i> Super hungry
+                                    </button>
+                                    <button
+                                        onclick="document.getElementById('user-craving').value='What vegetarian options do you have?'; getChefRecommendation();"
+                                        class="text-xs bg-slate-100 hover:bg-red-50 text-slate-700 hover:text-red-600 px-3 py-2 rounded-full border border-slate-200 hover:border-red-300 transition-all">
+                                        <i class="fa-solid fa-leaf text-green-600"></i> Vegetarian
+                                    </button>
+                                    <button
+                                        onclick="document.getElementById('user-craving').value='Something light and healthy'; getChefRecommendation();"
+                                        class="text-xs bg-slate-100 hover:bg-red-50 text-slate-700 hover:text-red-600 px-3 py-2 rounded-full border border-slate-200 hover:border-red-300 transition-all">
+                                        <i class="fa-solid fa-heart-pulse text-pink-500"></i> Light & healthy
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Response Box -->
+                            <div id="ai-response"
+                                class="hidden mt-6 bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
+                                <div class="flex gap-3">
+                                    <div
+                                        class="bg-blue-100 text-blue-600 w-8 h-8 rounded-full flex items-center justify-center shrink-0">
+                                        <i class="fa-solid fa-robot"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-blue-900 text-sm mb-1">Chef Recommends:</h4>
+                                        <p id="response-text" class="text-slate-700 text-sm leading-relaxed"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Error Box -->
+                            <div id="ai-error"
+                                class="hidden mt-4 text-red-600 text-sm bg-red-50 p-3 rounded-lg flex items-center gap-2">
+                                <i class="fa-solid fa-circle-exclamation"></i> Chef is busy right now. Try again!
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <script>
+            // AI Chef Recommendation Function
+            function getChefRecommendation() {
+                const input = document.getElementById('user-craving');
+                const responseBox = document.getElementById('ai-response');
+                const responseText = document.getElementById('response-text');
+                const errorBox = document.getElementById('ai-error');
+                const btnText = document.getElementById('btn-text');
+                const btnLoader = document.getElementById('btn-loader');
+
+                const craving = input.value.trim().toLowerCase();
+
+                if (!craving) {
+                    input.focus();
+                    return;
+                }
+
+                // Show loading
+                btnText.classList.add('hidden');
+                btnLoader.classList.remove('hidden');
+                responseBox.classList.add('hidden');
+                errorBox.classList.add('hidden');
+
+                // Simulate AI thinking time
+                setTimeout(() => {
+                    let recommendation = '';
+
+                    // Keywords mapping for better recommendations
+                    const keywords = {
+                        spicy: craving.includes('spicy') || craving.includes('hot') || craving.includes('chili') || craving.includes('chipotle'),
+                        crunchy: craving.includes('crunchy') || craving.includes('crispy') || craving.includes('fried'),
+                        healthy: craving.includes('healthy') || craving.includes('light') || craving.includes('fresh') || craving.includes('salad') || craving.includes('fit'),
+                        hungry: craving.includes('hungry') || craving.includes('starving') || craving.includes('big') || craving.includes('large') || craving.includes('double'),
+                        vegan: craving.includes('vegan') || craving.includes('vegetarian') || craving.includes('veg') || craving.includes('plant'),
+                        drink: craving.includes('drink') || craving.includes('beverage') || craving.includes('coffee') || craving.includes('water') || craving.includes('thirsty'),
+                        special: craving.includes('best') || craving.includes('popular') || craving.includes('recommend') || craving.includes('specialty'),
+                        local: craving.includes('local') || craving.includes('essaouira') || craving.includes('authentic') || craving.includes('sardine')
+                    };
+
+                    if (keywords.drink) {
+                        recommendation = `🥤 <strong>The Perfect Refreshment:</strong><br><br>
+                        • <strong>Iced Coffee (25 DH)</strong> - Our signature chilled brew.<br>
+                        • <strong>Fresh Lemonade</strong> - Made with local lemons.<br>
+                        • <strong>Sidi Ali Water</strong> - Pure mineral water.<br><br>
+                        <em>Chef's Tip: Our Iced Coffee is the perfect "reset" between bites of a spicy burger!</em>`;
+                    } else if (keywords.spicy) {
+                        recommendation = `🌶️ <strong>Heat Seeker's Choice:</strong><br><br>
+                        • <strong>Crispy Fish Burger (70 DH)</strong> - Features our secret chipotle sauce.<br>
+                        • <strong>Seafood Burrito (70 DH)</strong> - Spicy, filling, and packed with flavor.<br>
+                        • <strong>Nachos (45 DH)</strong> - Topped with jalapeños and spicy salsa.<br><br>
+                        <em>Pair with: A cold sparkling water to balance the heat.</em>`;
+                    } else if (keywords.crunchy) {
+                        recommendation = `🍟 <strong>Texture Paradise:</strong><br><br>
+                        • <strong>Double Crispy Fish (110 DH)</strong> - Maximum crunch factor.<br>
+                        • <strong>Calamari Rings (25 DH)</strong> - Golden, crispy, and tender.<br>
+                        • <strong>Onion Rings (25 DH)</strong> - The ultimate crunchy side.<br><br>
+                        <em>Did you know? Our batter is made fresh every morning for that perfect snap.</em>`;
+                    } else if (keywords.healthy) {
+                        recommendation = `🥗 <strong>Light & Nourishing:</strong><br><br>
+                        • <strong>Shrimp Salad (35 DH)</strong> - Fresh local shrimp on a bed of greens.<br>
+                        • <strong>Avocado Toast (45 DH)</strong> - Topped with our special spice blend.<br>
+                        • <strong>Grilled Fish Fillet (60 DH)</strong> - Pure protein, light seasoning.<br><br>
+                        <em>Freshness check: All our seafood is sourced from the blue boats daily.</em>`;
+                    } else if (keywords.hungry) {
+                        recommendation = `🍔 <strong>The Full Experience:</strong><br><br>
+                        • <strong>Double Crispy Fish Burger (110 DH)</strong> - Our heavy hitter.<br>
+                        • <strong>Fish & Chips (70 DH)</strong> - A satisfying classic.<br>
+                        • <strong>Add Potato Fries (20 DH)</strong> - You can't go wrong.<br><br>
+                        <em>Total feast: Combine these for the ultimate Essaouira meal!</em>`;
+                    } else if (keywords.vegan) {
+                        recommendation = `🌱 <strong>Plant-Based Goodness:</strong><br><br>
+                        • <strong>Tofu Burger (75 DH)</strong> - Crispy marinated tofu with fresh toppings.<br>
+                        • <strong>Avocado Toast (45 DH)</strong> - Packed with healthy fats.<br>
+                        • <strong>Potato Fries (20 DH)</strong> - Always vegan, always delicious.<br><br>
+                        <em>Yes, our Tofu is handled separately to ensure 100% vegetarian standards.</em>`;
+                    } else if (keywords.local) {
+                        recommendation = `🐟 <strong>Essaouira Special:</strong><br><br>
+                        • <strong>Sardine Burger (60 DH)</strong> - The soul of the city in a bun.<br>
+                        • <strong>Fancy Sardines (35 DH)</strong> - A modern twist on a local treasure.<br>
+                        • <strong>Local Catch Plate</strong> - Ask for today's harbor special.<br><br>
+                        <em>True taste: Sardines are Essaouira's pride—don't leave without trying one!</em>`;
+                    } else {
+                        recommendation = `👨‍🍳 <strong>Chef's Signature Selection:</strong><br><br>
+                        • <strong>Crispy Fish Burger (70 DH)</strong> - Our absolute bestseller.<br>
+                        • <strong>Iced Coffee (25 DH)</strong> - The talk of the town.<br>
+                        • <strong>Potato Fries (20 DH)</strong> - Because you deserve them.<br><br>
+                        <em>Welcome! If it's your first time, the Crispy Fish Burger is the perfect start.</em>`;
+                    }
+
+                    // Show response with a slight fade effect
+                    responseText.innerHTML = recommendation;
+                    responseBox.classList.remove('hidden');
+                    btnText.classList.remove('hidden');
+                    btnLoader.classList.add('hidden');
+
+                    // Scroll to response on mobile
+                    if (window.innerWidth < 768) {
+                        responseBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }
+                }, 800);
+            }
+        </script>
+
+        <!-- Menu Section -->
+        <section id="menu" class="py-12 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+
+                    <!-- Left Side - Text Content -->
+                    <div>
+                        <span class="text-red-600 font-bold tracking-widest uppercase text-sm mb-2 block">Our
+                            Kitchen</span>
+                        <h2 class="text-4xl md:text-5xl font-bold text-blue-950 mb-6 font-serif">
+                            Fresh Seafood, <br>Moroccan Soul
+                        </h2>
+                        <div class="h-1 w-20 bg-red-600 rounded-full mb-6"></div>
+
+                        <p class="text-slate-600 text-lg leading-relaxed mb-6">
+                            Every morning, we hand-select the finest catch from Essaouira's port. Our chefs transform
+                            this
+                            fresh seafood into extraordinary burgers, crispy tapas, and fusion dishes that blend
+                            Atlantic
+                            flavors with traditional Moroccan spices.
+                        </p>
+
+                        <p class="text-slate-600 text-lg leading-relaxed mb-8">
+                            From our signature crispy fish burger with homemade sharmoula to refreshing mint tea, each
+                            item
+                            on our menu tells the story of Essaouira's vibrant culinary heritage.
+                        </p>
+
+                        <!-- Features List -->
+                        <div class="space-y-4 mb-8">
+                            <div class="flex items-start gap-3">
+                                <div
+                                    class="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center shrink-0 mt-1">
+                                    <i class="fa-solid fa-fish text-white text-sm"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-blue-950 mb-1">Daily Fresh Catch</h4>
+                                    <p class="text-slate-600 text-sm">Sourced directly from local fishermen every
+                                        morning
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div
+                                    class="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center shrink-0 mt-1">
+                                    <i class="fa-solid fa-pepper-hot text-white text-sm"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-blue-950 mb-1">Authentic Spices</h4>
+                                    <p class="text-slate-600 text-sm">Traditional Moroccan sauce secret family
+                                        recipes</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div
+                                    class="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center shrink-0 mt-1">
+                                    <i class="fa-solid fa-heart text-white text-sm"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-blue-950 mb-1">Crafted with Love</h4>
+                                    <p class="text-slate-600 text-sm">Each dish prepared fresh to order with passion</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CTA Button -->
+                        <a href="menu.html"
+                            class="group inline-flex items-center justify-center gap-3 bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 text-white px-8 py-4 rounded-full font-bold text-lg shadow-xl shadow-red-600/30 hover:shadow-red-600/50 transition-all transform hover:scale-105">
+                            <i class="fa-solid fa-utensils group-hover:rotate-12 transition-transform"></i>
+                            <span>Discover Our Menu</span>
+                            <i class="fa-solid fa-arrow-right group-hover:translate-x-2 transition-transform"></i>
+                        </a>
+                    </div>
+
+                    <!-- Right Side - Photo Grid -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <!-- Large Burger Image -->
+                        <div class="col-span-2 relative">
+                            <!-- Decorative Frame -->
+                            <div
+                                class="absolute -inset-2 bg-gradient-to-br from-red-500 via-orange-500 to-yellow-500 rounded-[2rem] opacity-75 blur-sm">
+                            </div>
+                            <div class="relative bg-white p-2 rounded-3xl shadow-2xl">
+                                <div class="rounded-2xl overflow-hidden">
+                                    <img src="img/IMG_8128.webp" alt="Fish Burger" loading="lazy" width="800"
+                                        height="800"
+                                        class="w-full h-80 object-cover object-center scale-125 hover:scale-100 transition-transform duration-700">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Burger Image -->
+                        <div class="relative">
+                            <div
+                                class="absolute -inset-1 bg-gradient-to-br from-red-500 via-orange-500 to-yellow-500 rounded-2xl opacity-75 blur-sm">
+                            </div>
+                            <div class="relative bg-white p-1.5 rounded-2xl shadow-xl">
+                                <div class="rounded-xl overflow-hidden">
+                                    <img src="img/IMG_8105.webp" alt="Fish Nuggets" loading="lazy" width="400"
+                                        height="400"
+                                        class="w-full h-56 object-cover object-center scale-115 hover:scale-100 transition-transform duration-700">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Second Food Image -->
+                        <div class="relative">
+                            <div
+                                class="absolute -inset-1 bg-gradient-to-br from-red-500 via-orange-500 to-yellow-500 rounded-2xl opacity-75 blur-sm">
+                            </div>
+                            <div class="relative bg-white p-1.5 rounded-2xl shadow-xl">
+                                <div class="rounded-xl overflow-hidden">
+                                    <img src="img/IMG_8073.webp" alt="Fish Burger" loading="lazy" width="400"
+                                        height="400"
+                                        class="w-full h-56 object-cover object-center scale-115 hover:scale-100 transition-transform duration-700">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+    </main>
+
+    <!-- Visit Us / Contact Section -->
+    <footer id="contact"
+        class="relative bg-gradient-to-b from-blue-950 to-blue-900 text-white py-8 overflow-hidden mt-4">
+        <!-- Decorative Background -->
+        <div class="absolute inset-0 opacity-5"
+            style="background-image: radial-gradient(circle, #fff 1px, transparent 1px); background-size: 30px 30px;">
+        </div>
+
+        <div class="container mx-auto px-6 relative z-10">
+            <!-- Header with Accent -->
+            <div class="text-center mb-8">
+                <div class="inline-block mb-3">
+                    <h2
+                        class="text-3xl font-bold mb-1 bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
+                        Visit Us</h2>
+                    <div class="h-1 w-20 bg-gradient-to-r from-red-500 to-orange-500 rounded-full mx-auto"></div>
+                </div>
+                <p class="text-blue-200 text-sm">Experience authentic Essaouira seafood</p>
+            </div>
+
+            <!-- Enhanced Compact Grid - Auto-adjusts columns -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); gap: 0.75rem;"
+                class="max-w-5xl mx-auto">
+
+                <!-- Location Card (Essaouira) -->
+                <div id="essaouira-location-card"
+                    class="hidden group bg-gradient-to-br from-slate-800/60 to-slate-900/60 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-4 md:p-5 hover:border-red-500/50 hover:shadow-xl hover:shadow-red-500/10 transition-all duration-300 text-center hover:-translate-y-1">
+                    <div
+                        class="w-12 h-12 bg-gradient-to-br from-red-600 to-red-700 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-lg shadow-red-600/30 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-location-dot text-white text-lg"></i>
+                    </div>
+                    <h3 class="font-bold text-sm mb-2 text-white">Location</h3>
+                    <p class="text-blue-200 text-xs mb-1">Medina / Near the Port</p>
+                    <p class="text-white font-semibold text-xs mb-3">Essaouira, Morocco</p>
+                    <a href="https://maps.app.goo.gl/uCiuN8wMpsuHYAoZ6" target="_blank"
+                        class="inline-flex items-center gap-1 text-red-400 hover:text-red-300 transition-colors text-xs font-medium">
+                        <i class="fa-solid fa-directions"></i>
+                        <span>Get Directions</span>
+                    </a>
+                </div>
+
+
+
+                <!-- Phone Card (Essaouira locations only) -->
+                <div id="essaouira-phone-card"
+                    class="hidden group bg-gradient-to-br from-slate-800/60 to-slate-900/60 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-4 md:p-5 hover:border-blue-500/50 hover:shadow-xl hover:shadow-blue-500/10 transition-all duration-300 text-center hover:-translate-y-1">
+                    <div
+                        class="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-lg shadow-blue-600/30 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-phone text-white text-lg"></i>
+                    </div>
+                    <h3 class="font-bold text-sm mb-3 text-white">Call Us</h3>
+                    <a href="tel:+212704854663"
+                        class="text-blue-200 hover:text-white transition-colors text-sm font-medium">+212
+                        704-854663</a>
+                </div>
+
+
+
+                <!-- Hours Card -->
+                <div
+                    class="group bg-gradient-to-br from-slate-800/60 to-slate-900/60 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-4 md:p-5 hover:border-green-500/50 hover:shadow-xl hover:shadow-green-500/10 transition-all duration-300 text-center hover:-translate-y-1">
+                    <div
+                        class="w-12 h-12 bg-gradient-to-br from-green-600 to-green-700 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-lg shadow-green-600/30 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-clock text-white text-lg"></i>
+                    </div>
+                    <h3 class="font-bold text-sm mb-3 text-white">Opening Hours</h3>
+                    <p id="hours-days" class="text-blue-200 text-xs mb-1">Monday - Sunday</p>
+                    <p id="hours-time" class="font-semibold text-white text-sm">12:00 - 22:30</p>
+                </div>
+
+                <!-- Social Card -->
+                <div
+                    class="group bg-gradient-to-br from-pink-600/30 to-purple-600/30 backdrop-blur-sm border border-pink-500/40 rounded-2xl p-4 md:p-5 hover:border-pink-400/60 hover:shadow-xl hover:shadow-pink-500/20 transition-all duration-300 text-center hover:-translate-y-1">
+                    <div class="flex justify-center gap-4 mb-3">
+                        <div
+                            class="w-10 h-10 bg-gradient-to-br from-pink-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg shadow-pink-500/40 group-hover:scale-110 transition-transform">
+                            <i class="fa-brands fa-instagram text-white text-base"></i>
+                        </div>
+                        <div
+                            class="w-10 h-10 bg-slate-950 rounded-xl flex items-center justify-center shadow-lg shadow-slate-900/40 group-hover:scale-110 transition-transform">
+                            <i class="fa-brands fa-tiktok text-white text-base"></i>
+                        </div>
+                        <div
+                            class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-600/40 group-hover:scale-110 transition-transform">
+                            <i class="fa-brands fa-facebook-f text-white text-base"></i>
+                        </div>
+                    </div>
+                    <h3 class="font-bold text-sm mb-3 text-white">Follow Us</h3>
+                    <div class="flex flex-col gap-1">
+                        <a href="https://www.instagram.com/fishburger.essaouira" target="_blank"
+                            class="text-pink-200 hover:text-white transition-colors text-[10px] font-medium">@fishburger.essaouira</a>
+                        <a href="https://www.tiktok.com/@fishburgeressaouira?_r=1&_t=ZS-93cKBvmddP3" target="_blank"
+                            class="text-blue-200 hover:text-white transition-colors text-[10px] font-medium">@fishburgeressaouira</a>
+                        <a href="https://www.facebook.com/p/Fishburger-Essaouira-100087049917638/" target="_blank"
+                            class="text-blue-100 hover:text-white transition-colors text-[10px] font-medium">Fishburger
+                            Essaouira</a>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Bottom Bar -->
+            <div class="border-t border-slate-700 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+
+                    <!-- Logo -->
+                    <div class="flex items-center gap-3">
+                        <div class="bg-red-600 text-white w-12 h-12 rounded-full flex items-center justify-center">
+                            <i class="fa-solid fa-fish text-xl"></i>
+                        </div>
+                        <div>
+                            <span class="font-bold text-2xl uppercase">Fishburger</span>
+                            <p class="text-xs text-blue-300 uppercase tracking-widest">Made In Essaouira</p>
+                        </div>
+                    </div>
+
+                    <!-- Copyright -->
+                    <div class="text-center md:text-right">
+                        <p class="text-blue-300 text-sm">
+                            &copy; <span id="year"></span> Fishburger Made In Essaouira. All rights reserved.
+                        </p>
+                        <p class="text-blue-400 text-xs mt-1">
+                            Fresh seafood, local vibes, and the best spices in Essaouira
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </footer>
+
+
+    <!-- Menu Toggle Script -->
+    <script>
+        // --- MOBILE MENU TOGGLE ---
+        // This must be in global scope (not in ES6 module) to work properly
+        document.addEventListener('DOMContentLoaded', function () {
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const fixedMenuBtn = document.getElementById('fixed-menu-btn');
+            const menuCloseBtn = document.getElementById('menu-close-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+
+            // Toggle mobile menu
+            function toggleMenu() {
+                if (!mobileMenu) return;
+                mobileMenu.classList.toggle('hidden');
+                const isHidden = mobileMenu.classList.contains('hidden');
+
+                // Update both icons
+                [mobileMenuBtn, fixedMenuBtn].forEach(btn => {
+                    if (btn) {
+                        const icon = btn.querySelector('i');
+                        if (icon) {
+                            if (isHidden) {
+                                icon.classList.remove('fa-xmark');
+                                icon.classList.add('fa-bars');
+                            } else {
+                                icon.classList.remove('fa-bars');
+                                icon.classList.add('fa-xmark');
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Attach event listeners
+            if (mobileMenu) {
+                if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', toggleMenu);
+                if (fixedMenuBtn) fixedMenuBtn.addEventListener('click', toggleMenu);
+                if (menuCloseBtn) menuCloseBtn.addEventListener('click', toggleMenu);
+
+                // Close menu when clicking on a link
+                mobileLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenu.classList.add('hidden');
+                        // Reset icons
+                        [mobileMenuBtn, fixedMenuBtn].forEach(btn => {
+                            if (btn) {
+                                const icon = btn.querySelector('i');
+                                if (icon) {
+                                    icon.classList.remove('fa-xmark');
+                                    icon.classList.add('fa-bars');
+                                }
+                            }
+                        });
+                    });
+                });
+            }
+        });
+    </script>
+
+    <!-- JavaScript -->
+
+    <script type="module">
+        // ==================== FIREBASE IMPORTS ====================
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, collection, addDoc, serverTimestamp, doc, runTransaction } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        // Wait for menu-data.js to load
+        const menuData = window.menuData;
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAbkJpVWRXfOuG-VDp0dC0oGkPKo9VCZD0",
+            authDomain: "fishburger-system.firebaseapp.com",
+            projectId: "fishburger-system",
+            storageBucket: "fishburger-system.firebasestorage.app",
+            messagingSenderId: "1011829893886",
+            appId: "1:1011829893886:web:626820e2eb475b2b45d3af",
+            measurementId: "G-LHF8XPTL3G"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Backend API configuration
+        const API_URL = 'http://localhost:3000/api';
+
+        // --- LOCATION CHECK ---
+        // Check if user has selected a location
+        const urlParams = new URLSearchParams(window.location.search);
+        const locationFromUrl = urlParams.get('location');
+        const storedLocation = localStorage.getItem('selectedLocation');
+
+        // If location is in URL, store it
+        if (locationFromUrl) {
+            localStorage.setItem('selectedLocation', locationFromUrl);
+        }
+
+        // Get current location
+        const currentLocation = locationFromUrl || storedLocation;
+
+
+
+        // --- MOBILE MENU TOGGLE ---
+        // This is handled in the global script block above for scope reasons.
+
+        // --- DATA ---
+        // Simplified: Use the shared menuData instead of duplicating it here.
+        // (Note: category names like 'bestsellers' might need mapping if they differ)
+        // For now, we'll keep the logic but pull from the shared source.
+
+        // Get menu data based on location
+        const locationMenu = window.getMenuData(currentLocation);
+
+        // Map shared categories to landing page favorites
+        const landingMenu = {
+            bestsellers: locationMenu.burgers.filter(b => b.popular || b.note?.includes('Best Seller')),
+            burgers: locationMenu.burgers,
+            tapas: locationMenu.tapas,
+            specialties: locationMenu.globe
+        };
+
+        // --- CART STATE ---
+        let cart = [];
+
+        // --- ELEMENTS ---
+        const navbar = document.getElementById('navbar');
+        const menuGrid = document.getElementById('menu-grid');
+        const yearSpan = document.getElementById('year');
+        const tabs = document.querySelectorAll('.menu-tab');
+
+        // Cart Elements
+        const cartItemsContainer = document.getElementById('cart-items');
+        const cartFooter = document.getElementById('cart-footer');
+        const emptyCartMsg = document.getElementById('empty-cart-msg');
+        const cartTotalDisplay = document.getElementById('cart-total');
+        const cartCountBadge = document.getElementById('cart-count-badge');
+
+        // AI Elements
+        const userCravingInput = document.getElementById('user-craving');
+        const aiResponseDiv = document.getElementById('ai-response');
+        const responseText = document.getElementById('response-text');
+        const btnText = document.getElementById('btn-text');
+        const btnLoader = document.getElementById('btn-loader');
+        const askBtn = document.getElementById('ask-btn');
+        const aiError = document.getElementById('ai-error');
+
+        // --- SCROLL EFFECTS (Handled via Lenis below for better performance) ---
+
+
+        // --- MENU FUNCTION ---
+        function filterMenu(category) {
+            tabs.forEach(tab => {
+                if (tab.textContent.toLowerCase() === category || (category === 'specialties' && tab.textContent === 'Specialties')) {
+                    tab.classList.remove('bg-transparent', 'text-slate-600', 'border-slate-300');
+                    tab.classList.add('bg-blue-950', 'text-white', 'border-blue-950');
+                } else {
+                    tab.classList.add('bg-transparent', 'text-slate-600', 'border-slate-300');
+                    tab.classList.remove('bg-blue-950', 'text-white', 'border-blue-950');
+                }
+            });
+
+            menuGrid.innerHTML = '';
+            landingMenu[category].forEach((item, index) => {
+                const badge = item.popular || item.note?.includes('Best Seller')
+                    ? `<span class="absolute top-4 right-4 bg-red-600 text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">Top Seller</span>`
+                    : (item.veg ? `<span class="absolute top-4 right-4 bg-green-600 text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">Veg</span>` : '');
+
+                const el = document.createElement('div');
+                el.className = 'bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all border border-slate-100 relative group fade-enter';
+                el.innerHTML = `
+                    ${badge}
+                    <div class="flex justify-between items-start mb-2 pr-8">
+                        <h3 class="text-xl font-bold text-blue-950 group-hover:text-red-600 transition-colors serif">${item.name}</h3>
+                    </div>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-4 min-h-[40px]">${item.desc}</p>
+                    <div class="flex justify-between items-center border-t border-slate-100 pt-4">
+                        <span class="text-lg font-bold text-blue-950">${item.price}</span>
+                        <button onclick="addToCart('${item.name}', '${item.price}', '${item.img}')"
+                            class="text-red-600 text-sm font-bold hover:bg-red-50 px-3 py-1 rounded-full transition-colors active:scale-95 transform">Add +</button>
+                    </div>
+                `;
+                menuGrid.appendChild(el);
+                setTimeout(() => el.classList.add('fade-enter-active'), index * 100);
+            });
+        }
+
+        // --- CART FUNCTIONS ---
+        window.addToCart = function (name, priceStr, imgUrl) {
+            const price = parseInt(priceStr.replace(/[^0-9]/g, ''));
+            cart.push({ name, price, priceStr, imgUrl });
+            updateCartUI();
+            if (cart.length === 1) {
+                const orderSec = document.getElementById('order');
+                if (orderSec) lenis.scrollTo(orderSec);
+            }
+        };
+
+        window.removeFromCart = function (index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        };
+
+        function updateCartUI() {
+            if (cart.length > 0) {
+                cartCountBadge.innerText = cart.length;
+                cartCountBadge.classList.remove('hidden');
+                emptyCartMsg.classList.add('hidden');
+                cartItemsContainer.classList.remove('hidden');
+                cartFooter.classList.remove('hidden');
+            } else {
+                cartCountBadge.classList.add('hidden');
+                emptyCartMsg.classList.remove('hidden');
+                cartItemsContainer.classList.add('hidden');
+                cartFooter.classList.add('hidden');
+            }
+
+            cartItemsContainer.innerHTML = '';
+            let total = 0;
+
+            cart.forEach((item, index) => {
+                total += item.price;
+                const div = document.createElement('div');
+                div.className = 'flex justify-between items-center bg-white p-4 rounded-xl border border-slate-200 shadow-md hover:shadow-lg transition-all transform hover:scale-[1.02]';
+                div.innerHTML = `
+                    <div class="flex items-center gap-3 flex-1">
+                        <div class="w-12 h-12 bg-gradient-to-br from-blue-100 to-blue-200 rounded-lg flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-fish text-blue-600 text-lg"></i>
+                        </div>
+                        <div>
+                            <div class="font-bold text-sm text-blue-950">${item.name}</div>
+                            <div class="text-xs text-slate-500 font-semibold">${item.priceStr}</div>
+                        </div>
+                    </div>
+                    <button onclick="removeFromCart(${index})" class="text-slate-400 hover:text-red-600 hover:bg-red-50 transition-all p-2 rounded-lg">
+                        <i class="fa-solid fa-trash-can text-lg"></i>
+                    </button>
+                `;
+                cartItemsContainer.appendChild(div);
+            });
+
+            cartTotalDisplay.innerText = total + " DH";
+        }
+
+
+
+        // --- SEND ORDER TO KITCHEN (FIREBASE FIRESTORE) ---
+        async function sendOrderToKitchen(orderData) {
+            try {
+                // Get next order number using transaction
+                const orderNumber = await getNextOrderNumber();
+
+                // Prepare order for Firestore
+                const firestoreOrder = {
+                    orderNumber: orderNumber, // Sequential number
+                    customer: orderData.customer,
+                    items: orderData.items.map(item => ({
+                        name: item.name,
+                        price: item.price,
+                        priceStr: item.priceStr,
+                        quantity: 1
+                    })),
+                    total: orderData.total,
+                    location: orderData.location,
+                    status: 'pending',
+                    timestamp: serverTimestamp(),
+                    createdAt: new Date().toISOString()
+                };
+
+                // Add to Firestore
+                const docRef = await addDoc(collection(db, 'orders'), firestoreOrder);
+
+                console.log(`Order #${orderNumber} created in Firestore:`, docRef.id);
+
+                // Show custom success modal with order number
+                showSuccessModal(orderNumber);
+
+                // Clear Cart
+                cart = [];
+                updateCartUI();
+
+            } catch (error) {
+                console.error("Error sending order to Firestore:", error);
+                showErrorModal(error.message);
+            }
+        }
+
+        // Get next order number using Firebase transaction
+        async function getNextOrderNumber() {
+            const counterRef = doc(db, 'counters', 'orderCounter');
+
+            try {
+                const result = await runTransaction(db, async (transaction) => {
+                    const counterDoc = await transaction.get(counterRef);
+
+                    let newNumber;
+                    if (!counterDoc.exists()) {
+                        // Initialize counter if it doesn't exist
+                        newNumber = 1;
+                        transaction.set(counterRef, { currentNumber: newNumber });
+                    } else {
+                        // Increment counter
+                        newNumber = counterDoc.data().currentNumber + 1;
+                        transaction.update(counterRef, { currentNumber: newNumber });
+                    }
+
+                    return newNumber;
+                });
+
+                return result;
+            } catch (error) {
+                console.error("Error getting order number:", error);
+                // Fallback to timestamp-based number if transaction fails
+                return Date.now() % 10000;
+            }
+        }
+
+        // Custom Success Modal
+        function showSuccessModal(orderNumber) {
+            // Format order number with leading zeros (e.g., 001, 002, 123)
+            const formattedOrderNumber = String(orderNumber).padStart(3, '0');
+
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black/60 backdrop-blur-sm z-[9999] flex items-center justify-center p-4 animate-fadeIn';
+            modal.innerHTML = `
+                <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-8 transform animate-slideUp text-center">
+                    <div class="w-20 h-20 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg animate-bounce">
+                        <i class="fa-solid fa-check text-white text-4xl"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold text-green-600 mb-3">Order Sent to Kitchen!</h2>
+                    <div class="bg-green-50 rounded-2xl p-4 mb-6">
+                        <p class="text-sm text-slate-600 mb-2">Order Number</p>
+                        <p class="text-4xl font-bold text-blue-950">#${formattedOrderNumber}</p>
+                    </div>
+                    <div class="space-y-3 mb-6">
+                        <div class="flex items-center justify-center gap-2 text-slate-600">
+                            <i class="fa-solid fa-fire text-orange-500"></i>
+                            <span class="text-sm">Your order will appear instantly in the kitchen dashboard!</span>
+                        </div>
+                        <div class="flex items-center justify-center gap-2 text-slate-600">
+                            <i class="fa-solid fa-clock text-blue-500"></i>
+                            <span class="text-sm">Estimated preparation time: 15-20 minutes</span>
+                        </div>
+                    </div>
+                    <p class="text-lg font-semibold text-slate-700 mb-6">Thank you for your order! 🍔</p>
+                    <button onclick="this.closest('.fixed').remove()"
+                        class="w-full px-6 py-4 rounded-xl bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold shadow-lg shadow-green-600/30 hover:shadow-green-600/50 transition-all transform hover:scale-105">
+                        Awesome!
+                    </button>
+                </div>
+            `;
+            document.body.appendChild(modal);
+
+            // Auto-remove after 10 seconds
+            setTimeout(() => {
+                if (modal.parentElement) {
+                    modal.remove();
+                }
+            }, 10000);
+
+            // Close on backdrop click
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.remove();
+                }
+            });
+        }
+
+        // Custom Error Modal
+        function showErrorModal(errorMessage) {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black/60 backdrop-blur-sm z-[9999] flex items-center justify-center p-4 animate-fadeIn';
+            modal.innerHTML = `
+                <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-8 transform animate-slideUp text-center">
+                    <div class="w-20 h-20 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                        <i class="fa-solid fa-exclamation-triangle text-white text-4xl"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold text-red-600 mb-3">Oops! Something went wrong</h2>
+                    <div class="bg-red-50 rounded-2xl p-4 mb-6">
+                        <p class="text-sm text-slate-700">${errorMessage}</p>
+                    </div>
+                    <p class="text-sm text-slate-600 mb-6">Please try again or call us directly.</p>
+                    <button onclick="this.closest('.fixed').remove()"
+                        class="w-full px-6 py-4 rounded-xl bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold shadow-lg shadow-red-600/30 hover:shadow-red-600/50 transition-all transform hover:scale-105">
+                        Got it
+                    </button>
+                </div>
+            `;
+            document.body.appendChild(modal);
+
+            // Close on backdrop click
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.remove();
+                }
+            });
+        }
+
+        // --- AI CHEF FUNCTION (LOCAL - No Backend Required) ---
+        // Menu recommendations with keywords for matching
+        const menuRecommendations = {
+            'Crispy Fish Burger': {
+                keywords: ['spicy', 'crispy', 'crunchy', 'fried', 'hot', 'classic', 'best', 'popular', 'seller', 'bestseller'],
+                description: 'Our signature Crispy Fish Burger with chipotle sauce is perfect for you! Crispy white fish with a spicy kick, creamy coleslaw, and tangy pickles.',
+                price: '95 DH'
+            },
+            'Po Boy Sandwich': {
+                keywords: ['big', 'hungry', 'large', 'filling', 'sandwich', 'american', 'super', 'huge', 'starving'],
+                description: 'Try our Po Boy Sandwich - it\'s huge! A 12-inch Moroccan baguette stuffed with big fried white fish and tartar sauce. Perfect when you\'re super hungry!',
+                price: '70 DH'
+            },
+            'Msemmen Fish Tacos': {
+                keywords: ['fusion', 'unique', 'different', 'moroccan', 'tacos', 'flatbread', 'local', 'creative', 'special'],
+                description: 'Go for our Msemmen Fish Tacos! A unique fusion of Moroccan flatbread and fresh fish. It\'s our most creative dish!',
+                price: '45 DH'
+            },
+            'Fish Burger (Grilled)': {
+                keywords: ['healthy', 'light', 'grilled', 'fresh', 'lean', 'diet', 'low', 'calorie', 'fit', 'fitness'],
+                description: 'The Grilled Fish Burger is your best bet! Healthy grilled white fish with cheese, fresh veggies, and tartar sauce. Light but satisfying!',
+                price: '90 DH'
+            },
+            'Octopus Burger': {
+                keywords: ['unique', 'special', 'different', 'octopus', 'seafood', 'exotic', 'adventurous', 'adventure', 'new', 'try'],
+                description: 'Be adventurous with our Octopus Burger! Crispy chopped octopus legs with salsa verde. Unique and absolutely delicious!',
+                price: '110 DH'
+            },
+            'Calamari Burger': {
+                keywords: ['crispy', 'rings', 'calamari', 'squid', 'crunchy', 'fried', 'golden'],
+                description: 'You\'ll love our Calamari Burger! Crispy calamari rings with lettuce, pickles, and tartar sauce. Crunchy perfection!',
+                price: '110 DH'
+            },
+            'Sardine Burger': {
+                keywords: ['local', 'traditional', 'moroccan', 'sardine', 'authentic', 'strong', 'essaouira', 'flavor'],
+                description: 'Try our Sardine Burger - a local favorite! Double sardine patties with caramelized onions. Authentic Essaouira flavor!',
+                price: '90 DH'
+            },
+            'Eggplant Burger': {
+                keywords: ['vegetarian', 'veg', 'veggie', 'plant', 'no meat', 'eggplant', 'meatless', 'green', 'vegetables'],
+                description: 'Our Eggplant Burger is perfect for you! Crispy homemade eggplant patty with cheese and coleslaw. Vegetarian and delicious!',
+                price: '90 DH'
+            },
+            'Fish & Chips': {
+                keywords: ['chips', 'fries', 'british', 'english', 'classic', 'potato', 'wedges'],
+                description: 'Classic Fish & Chips! Battered fried white fish with crispy potato wedges, coleslaw, and tartar sauce. A timeless favorite!',
+                price: '90 DH'
+            },
+            'Fish Burrito': {
+                keywords: ['mexican', 'burrito', 'wrap', 'guacamole', 'rice', 'filling', 'tex-mex'],
+                description: 'Try our Fish Burrito! Crispy white fish wrapped with guacamole, rice, salsa verde, coleslaw, and chipotle sauce. Packed with flavor!',
+                price: '90 DH'
+            }
+        };
+
+        window.getChefRecommendation = function () {
+            const craving = userCravingInput.value.trim();
+            if (!craving) {
+                aiError.classList.remove('hidden');
+                aiError.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> Please tell us what you\'re craving!';
+                return;
+            }
+
+            // UI Loading State
+            btnText.classList.add('hidden');
+            btnLoader.classList.remove('hidden');
+            askBtn.disabled = true;
+            aiResponseDiv.classList.add('hidden');
+            aiError.classList.add('hidden');
+
+            // Simulate a brief "thinking" delay for better UX
+            setTimeout(() => {
+                try {
+                    // Convert craving to lowercase for matching
+                    const cravingLower = craving.toLowerCase();
+
+                    // Find best match
+                    let bestMatch = null;
+                    let maxScore = 0;
+
+                    for (const [dish, data] of Object.entries(menuRecommendations)) {
+                        let score = 0;
+                        for (const keyword of data.keywords) {
+                            if (cravingLower.includes(keyword)) {
+                                score++;
+                            }
+                        }
+                        if (score > maxScore) {
+                            maxScore = score;
+                            bestMatch = { dish, ...data };
+                        }
+                    }
+
+                    // If no keyword match, provide a default recommendation
+                    if (!bestMatch || maxScore === 0) {
+                        bestMatch = {
+                            dish: 'Crispy Fish Burger',
+                            description: 'Can\'t go wrong with our signature Crispy Fish Burger! It\'s our most popular dish with crispy white fish, spicy chipotle sauce, and fresh toppings.',
+                            price: '95 DH'
+                        };
+                    }
+
+                    // Display recommendation
+                    responseText.innerHTML = `<strong>${bestMatch.dish}</strong> (${bestMatch.price})<br><br>${bestMatch.description}`;
+                    aiResponseDiv.classList.remove('hidden');
+
+                } catch (error) {
+                    console.error("AI Chef Error:", error);
+                    aiError.classList.remove('hidden');
+                    aiError.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> Chef is busy right now. Try again!';
+                } finally {
+                    // Reset UI
+                    btnText.classList.remove('hidden');
+                    btnLoader.classList.add('hidden');
+                    askBtn.disabled = false;
+                }
+            }, 500); // 500ms delay for natural feel
+        };
+
+        // --- INIT ---
+        // Initialize with Bestsellers
+        filterMenu('bestsellers');
+
+        // Set current year
+        if (yearSpan) {
+            yearSpan.innerText = new Date().getFullYear();
+        }
+
+        // Expose functions to window for HTML onclick access
+        window.filterMenu = filterMenu;
+
+        // --- LENIS SMOOTH SCROLL ---
+        // Initialize Lenis for smooth scrolling on all devices
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            orientation: 'vertical',
+            gestureOrientation: 'vertical',
+            smoothWheel: true,
+            wheelMultiplier: 1,
+            smoothTouch: true, // Enable smooth scroll on touch devices (mobile)
+            touchMultiplier: 2,
+            infinite: false,
+        });
+
+        // Lenis animation frame
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+
+        // --- SMOOTH 2D IMAGE SCROLL ANIMATION ---
+        const parallaxImages = document.querySelectorAll('.parallax-scroll-img');
+
+        function updateParallax() {
+            if (parallaxImages.length === 0) return;
+
+            const viewportHeight = window.innerHeight;
+
+            parallaxImages.forEach(img => {
+                const wrapper = img.parentElement;
+                const rect = wrapper.getBoundingClientRect();
+                const buffer = 100;
+
+                if (rect.top < viewportHeight + buffer && rect.bottom > -buffer) {
+                    // Mark visible for fade-in
+                    if (!img.classList.contains('is-visible')) {
+                        img.classList.add('is-visible');
+                    }
+
+                    // Parallax & Scale Logic
+                    const center = (rect.top + rect.height / 2) - (viewportHeight / 2);
+                    const percentFromCenter = center / (viewportHeight / 2);
+                    const parallaxY = percentFromCenter * 20;
+
+                    let scaleProgress = 1 - ((rect.top + rect.height) / (viewportHeight + rect.height));
+                    scaleProgress = Math.max(0, Math.min(1, scaleProgress));
+                    const scale = 1 + (scaleProgress * 0.05);
+
+                    img.style.transform = `translateY(${parallaxY}px) scale(${scale})`;
+                } else {
+                    // Optional: remove visible class if far offscreen? 
+                    // Better to keep it to avoid flickering on fast scroll back
+                }
+            });
+        }
+
+        // Run on Lenis scroll
+        // lenis.on('scroll', updateParallax);
+
+        // Run immediately on load to show initial images
+        // updateParallax();
+        // Also run after a short delay to ensure layout is settled
+        // setTimeout(updateParallax, 100);
+
+        // --- NEW: IntersectionObserver for Visibility ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { rootMargin: "0px 0px -50px 0px", threshold: 0.1 });
+
+        parallaxImages.forEach(img => observer.observe(img));
+
+        // --- NEW: Parallax Update Function ---
+        function updateParallaxEffect() {
+            const viewportHeight = window.innerHeight;
+            parallaxImages.forEach(img => {
+                if (img.classList.contains('is-visible')) {
+                    const wrapper = img.parentElement;
+                    const rect = wrapper.getBoundingClientRect();
+                    if (rect.top < viewportHeight && rect.bottom > 0) {
+                        const center = (rect.top + rect.height / 2) - (viewportHeight / 2);
+                        const percentFromCenter = center / (viewportHeight / 2);
+                        const parallaxY = percentFromCenter * 20;
+                        let scaleProgress = 1 - ((rect.top + rect.height) / (viewportHeight + rect.height));
+                        scaleProgress = Math.max(0, Math.min(1, scaleProgress));
+                        const scale = 1 + (scaleProgress * 0.05);
+                        img.style.transform = `translateY(${parallaxY}px) scale(${scale})`;
+                    }
+                }
+            });
+        }
+
+        // Run on Lenis scroll (replaces old handler)
+        lenis.on('scroll', updateParallaxEffect);
+        updateParallaxEffect();
+
+        // --- UNIFIED SMART SCROLL NAVBAR (LENIS-BASED) ---
+        let lastScrollY = 0;
+        lenis.on('scroll', ({ scroll, direction }) => {
+            const navbarEl = document.getElementById('navbar');
+            if (!navbarEl) return;
+
+            // Background toggle
+            if (scroll > 50) {
+                navbarEl.classList.add('bg-blue-950', 'shadow-md', 'py-4');
+                navbarEl.classList.remove('bg-transparent', 'py-6');
+            } else {
+                navbarEl.classList.remove('bg-blue-950', 'shadow-md', 'py-4');
+                navbarEl.classList.add('bg-transparent', 'py-6');
+            }
+
+            // Smart Hide/Show Logic
+            if (scroll <= 100) {
+                navbarEl.classList.remove('nav-hidden');
+            } else {
+                const isScrollingDown = direction > 0 || (scroll > lastScrollY + 10);
+                const isScrollingUp = direction < 0 || (scroll < lastScrollY - 10);
+                
+                if (isScrollingDown) {
+                    navbarEl.classList.add('nav-hidden');
+                } else if (isScrollingUp) {
+                    navbarEl.classList.remove('nav-hidden');
+                }
+            }
+            lastScrollY = scroll;
+        });
+
+        // Stop Lenis when clicking on anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href !== '#') {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        lenis.scrollTo(target, {
+                            offset: -80, // Account for fixed navbar
+                            duration: 1.5
+                        });
+                    }
+                }
+            });
+        });
+
+        // --- CUSTOM MODAL FOR CHECKOUT ---
+        function showCheckoutModal() {
+            return new Promise((resolve) => {
+                const modal = document.createElement('div');
+                modal.id = 'checkout-modal';
+                modal.className = 'fixed inset-0 bg-black/60 backdrop-blur-sm z-[9999] flex items-center justify-center p-4 animate-fadeIn';
+                modal.innerHTML = `
+                    <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-8 transform animate-slideUp">
+                        <div class="text-center mb-6">
+                            <div class="w-16 h-16 bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                                <i class="fa-solid fa-user text-white text-2xl"></i>
+                            </div>
+                            <h2 class="text-2xl font-bold text-blue-950 mb-2">Customer Details</h2>
+                            <p class="text-slate-500 text-sm">Please provide your information</p>
+                        </div>
+
+                        <form id="checkout-form" class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">
+                                    <i class="fa-solid fa-user text-blue-600 mr-2"></i>Your Name
+                                </label>
+                                <input type="text" id="customer-name" required
+                                    class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-blue-600 focus:ring-4 focus:ring-blue-100 outline-none transition-all"
+                                    placeholder="Enter your name">
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">
+                                    <i class="fa-solid fa-location-dot text-blue-600 mr-2"></i>Delivery Address
+                                </label>
+                                <input type="text" id="customer-address" required
+                                    class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-blue-600 focus:ring-4 focus:ring-blue-100 outline-none transition-all"
+                                    placeholder="Enter address or 'Pickup'">
+                            </div>
+
+                            <div class="flex gap-3 pt-4">
+                                <button type="button" onclick="closeCheckoutModal(false)"
+                                    class="flex-1 px-6 py-3 rounded-xl border-2 border-slate-300 text-slate-700 font-bold hover:bg-slate-50 transition-all">
+                                    Cancel
+                                </button>
+                                <button type="submit"
+                                    class="flex-1 px-6 py-3 rounded-xl bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold shadow-lg shadow-green-600/30 hover:shadow-green-600/50 transition-all transform hover:scale-105">
+                                    Confirm Order
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                `;
+
+                document.body.appendChild(modal);
+
+                // Focus on first input
+                setTimeout(() => {
+                    document.getElementById('customer-name').focus();
+                }, 100);
+
+                // Handle form submission
+                document.getElementById('checkout-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const name = document.getElementById('customer-name').value.trim();
+                    const address = document.getElementById('customer-address').value.trim();
+
+                    if (name && address) {
+                        modal.remove();
+                        resolve({ name, address });
+                    }
+                });
+
+                // Close modal function
+                window.closeCheckoutModal = (confirmed) => {
+                    modal.remove();
+                    if (!confirmed) {
+                        resolve(null);
+                    }
+                };
+
+                // Close on backdrop click
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        window.closeCheckoutModal(false);
+                    }
+                });
+            });
+        }
+
+        // Update checkout function to use custom modal
+        window.checkout = async function () {
+            if (cart.length === 0) return;
+
+            // Show custom modal instead of prompt
+            const customerInfo = await showCheckoutModal();
+            if (!customerInfo) return;
+
+            // Prepare Order Data
+            const orderData = {
+                items: cart,
+                total: cart.reduce((sum, item) => sum + item.price, 0),
+                customer: {
+                    name: customerInfo.name,
+                    address: customerInfo.address
+                },
+                location: currentLocation || 'unknown'
+            };
+
+            // Send to Kitchen
+            await sendOrderToKitchen(orderData);
+        };
+    </script>
+
+    <!-- Add animation styles for modal -->
+    <style>
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fadeIn {
+            animation: fadeIn 0.2s ease-out;
+        }
+
+        .animate-slideUp {
+            animation: slideUp 0.3s ease-out;
+        }
+    </style>
+
+    <!-- Location-based footer visibility -->
+    <script>
+        (function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const location = urlParams.get('location') || localStorage.getItem('selectedLocation');
+
+            const essaouiraLocationCard = document.getElementById('essaouira-location-card');
+            const essaouiraPhoneCard = document.getElementById('essaouira-phone-card');
+            const hoursTime = document.getElementById('hours-time');
+            const mobileHoursTime = document.getElementById('mobile-hours-time');
+
+            // Always show Essaouira cards regardless of sub-location
+            if (essaouiraLocationCard) essaouiraLocationCard.classList.remove('hidden');
+            if (essaouiraPhoneCard) essaouiraPhoneCard.classList.remove('hidden');
+
+            // Show standard hours (Medina/Rooftop use the same)
+            if (hoursTime) hoursTime.textContent = '11:30 – 23:30';
+            if (mobileHoursTime) mobileHoursTime.textContent = '11:30 – 23:30';
+        })();
+    </script>
+
+    <!-- Performance: Lazy Media Intersection Observer -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const lazyMediaObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const media = entry.target;
+                        if (media.tagName === 'VIDEO' && media.dataset.src) {
+                            media.src = media.dataset.src;
+                            media.load();
+                            media.play().catch(() => { }); // Autoplay might be blocked
+                            media.removeAttribute('data-src');
+                        } else if (media.tagName === 'IMG' && media.dataset.src) {
+                            media.src = media.dataset.src;
+                            media.removeAttribute('data-src');
+                        }
+                        observer.unobserve(media);
+                    }
+                });
+            }, { rootMargin: '200px' });
+
+            document.querySelectorAll('.lazy-video, .lazy-img').forEach(el => lazyMediaObserver.observe(el));
+
+            // Video auto-pause when out of view
+            const videoPauseObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    const video = entry.target;
+                    if (!entry.isIntersecting) {
+                        video.pause();
+                    } else if (video.src) {
+                        video.play().catch(() => { });
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('video').forEach(video => videoPauseObserver.observe(video));
+        });
+    </script>
+    <!-- Mobile Menu Overlay (Moved to Body End) -->
+    <div id="mobile-menu"
+        class="hidden fixed top-0 right-0 h-full w-full max-w-md bg-gradient-to-br from-blue-950 via-blue-900 to-slate-900 backdrop-blur-lg text-white shadow-2xl py-8 px-6 flex flex-col border-l-2 border-red-500/30 z-[99999] transform transition-transform duration-300">
+
+        <!-- Menu Header -->
+        <div class="mb-8 pb-6 border-b border-white/10">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div
+                        class="bg-red-600 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg">
+                        <i class="fa-solid fa-burger text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-xl tracking-wider">FISHBURGER</h3>
+                        <p class="text-xs text-blue-300 tracking-widest">Made In Essaouira</p>
+                    </div>
+                </div>
+                <!-- Close Button -->
+                <button id="menu-close-btn"
+                    class="bg-white/10 backdrop-blur-md border border-white/20 text-white w-12 h-12 rounded-full flex items-center justify-center hover:bg-red-600 hover:border-red-600 transition-all duration-300 shadow-xl group">
+                    <i class="fa-solid fa-xmark text-xl group-hover:rotate-90 transition-transform duration-300"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Menu Links -->
+        <nav class="flex-1 flex flex-col gap-2 overflow-y-auto">
+            <a href="#about"
+                class="mobile-link group flex items-center gap-4 px-4 py-4 rounded-xl hover:bg-white/10 transition-all duration-300 border border-transparent hover:border-red-500/30">
+                <div
+                    class="w-10 h-10 bg-red-600/20 rounded-lg flex items-center justify-center group-hover:bg-red-600 transition-all duration-300">
+                    <i class="fa-solid fa-book-open text-red-400 group-hover:text-white transition-colors"></i>
+                </div>
+                <span class="text-lg font-semibold group-hover:text-red-400 transition-colors">The Story</span>
+            </a>
+            <a href="#gallery"
+                class="mobile-link group flex items-center gap-4 px-4 py-4 rounded-xl hover:bg-white/10 transition-all duration-300 border border-transparent hover:border-red-500/30">
+                <div
+                    class="w-10 h-10 bg-red-600/20 rounded-lg flex items-center justify-center group-hover:bg-red-600 transition-all duration-300">
+                    <i class="fa-solid fa-images text-red-400 group-hover:text-white transition-colors"></i>
+                </div>
+                <span class="text-lg font-semibold group-hover:text-red-400 transition-colors">Gallery</span>
+            </a>
+            <a href="#menu"
+                class="mobile-link group flex items-center gap-4 px-4 py-4 rounded-xl hover:bg-white/10 transition-all duration-300 border border-transparent hover:border-red-500/30">
+                <div
+                    class="w-10 h-10 bg-red-600/20 rounded-lg flex items-center justify-center group-hover:bg-red-600 transition-all duration-300">
+                    <i class="fa-solid fa-utensils text-red-400 group-hover:text-white transition-colors"></i>
+                </div>
+                <span class="text-lg font-semibold group-hover:text-red-400 transition-colors">Menu</span>
+            </a>
+            <a href="#ai-chef"
+                class="mobile-link group flex items-center gap-4 px-4 py-4 rounded-xl hover:bg-white/10 transition-all duration-300 border border-transparent hover:border-red-500/30">
+                <div
+                    class="w-10 h-10 bg-red-600/20 rounded-lg flex items-center justify-center group-hover:bg-red-600 transition-all duration-300">
+                    <i
+                        class="fa-solid fa-wand-magic-sparkles text-red-400 group-hover:text-white transition-colors"></i>
+                </div>
+                <span class="text-lg font-semibold group-hover:text-red-400 transition-colors">AI Chef</span>
+            </a>
+            <a href="index.html"
+                class="mobile-link group flex items-center gap-4 px-4 py-4 rounded-xl hover:bg-white/10 transition-all duration-300 border border-transparent hover:border-red-500/30">
+                <div
+                    class="w-10 h-10 bg-red-600/20 rounded-lg flex items-center justify-center group-hover:bg-red-600 transition-all duration-300">
+                    <i class="fa-solid fa-shopping-cart text-red-400 group-hover:text-white transition-colors"></i>
+                </div>
+                <span class="text-lg font-semibold group-hover:text-red-400 transition-colors">Order Online</span>
+            </a>
+            <a href="#contact"
+                class="mobile-link group flex items-center gap-4 px-4 py-4 rounded-xl hover:bg-white/10 transition-all duration-300 border border-transparent hover:border-red-500/30">
+                <div
+                    class="w-10 h-10 bg-red-600/20 rounded-lg flex items-center justify-center group-hover:bg-red-600 transition-all duration-300">
+                    <i class="fa-solid fa-location-dot text-red-400 group-hover:text-white transition-colors"></i>
+                </div>
+                <span class="text-lg font-semibold group-hover:text-red-400 transition-colors">Visit Us</span>
+            </a>
+        </nav>
+
+        <!-- Menu Footer -->
+        <div class="mt-6 pt-6 border-t border-white/10">
+            <div class="mb-4">
+                <p class="text-sm text-blue-200 mb-2 flex items-center gap-2">
+
+            </div>
+            <div class="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10">
+                <p class="text-sm text-blue-200 mb-2 flex items-center gap-2">
+                    <i class="fa-solid fa-clock text-red-400"></i>
+                    <span class="font-semibold">Open Daily</span>
+                </p>
+                <p id="mobile-hours-time" class="text-xs text-blue-300">12:00 - 22:30</p>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Translation System -->
+    <script src="translations.js"></script>
+
+    <script>
+        (function () {
+            const navbar = document.getElementById('navbar');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            if (!navbar) return;
+
+            let lastScrollY = window.scrollY || window.pageYOffset || 0;
+
+            function syncNavbar(scrollY) {
+                if (scrollY > 50) {
+                    navbar.classList.add('bg-blue-950', 'shadow-md', 'py-4');
+                    navbar.classList.remove('bg-transparent', 'py-6');
+                } else {
+                    navbar.classList.remove('bg-blue-950', 'shadow-md', 'py-4');
+                    navbar.classList.add('bg-transparent', 'py-6');
+                }
+
+                const menuOpen = mobileMenu && !mobileMenu.classList.contains('hidden');
+
+                if (scrollY <= 100 || menuOpen) {
+                    navbar.classList.remove('nav-hidden');
+                } else if (scrollY > lastScrollY) {
+                    navbar.classList.add('nav-hidden');
+                } else if (scrollY < lastScrollY) {
+                    navbar.classList.remove('nav-hidden');
+                }
+
+                lastScrollY = scrollY;
+            }
+
+            window.addEventListener('scroll', () => {
+                syncNavbar(window.scrollY || window.pageYOffset || 0);
+            }, { passive: true });
+
+            window.addEventListener('load', () => {
+                syncNavbar(window.scrollY || window.pageYOffset || 0);
+            });
+
+            syncNavbar(window.scrollY || window.pageYOffset || 0);
+        })();
+    </script>
+
+</body>
+
+</html>

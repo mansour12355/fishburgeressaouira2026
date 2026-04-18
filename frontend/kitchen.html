@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kitchen Dashboard - Fishburger</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=Playfair+Display:wght@700;900&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        .serif {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .order-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .order-card:hover {
+            transform: translateY(-4px);
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-blue-950 text-white py-4 px-6 sticky top-0 z-50 shadow-lg">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="bg-orange-500 p-2 rounded-xl">
+                    <i class="fa-solid fa-fire-burner text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight">KITCHEN <span class="text-orange-400">DASHBOARD</span>
+                    </h1>
+                    <p class="text-[10px] text-blue-300 uppercase tracking-widest font-bold">Fishburger Essaouira</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-6">
+                <div class="hidden md:flex items-center gap-4 text-sm font-medium border-l border-white/10 pl-6">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                        Live Connection
+                    </div>
+                </div>
+                <button onclick="location.reload()" class="bg-white/10 hover:bg-white/20 p-2 rounded-lg transition-all">
+                    <i class="fa-solid fa-rotate"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        <!-- Stats Summary -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex items-center gap-4">
+                <div class="w-12 h-12 bg-yellow-100 rounded-2xl flex items-center justify-center text-yellow-600">
+                    <i class="fa-solid fa-clock text-xl"></i>
+                </div>
+                <div>
+                    <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Pending</p>
+                    <h2 id="count-pending" class="text-2xl font-black text-slate-800">0</h2>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex items-center gap-4">
+                <div class="w-12 h-12 bg-orange-100 rounded-2xl flex items-center justify-center text-orange-600">
+                    <i class="fa-solid fa-utensils text-xl"></i>
+                </div>
+                <div>
+                    <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Preparing</p>
+                    <h2 id="count-preparing" class="text-2xl font-black text-slate-800">0</h2>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex items-center gap-4">
+                <div class="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center text-blue-600">
+                    <i class="fa-solid fa-motorcycle text-xl"></i>
+                </div>
+                <div>
+                    <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">On Delivery</p>
+                    <h2 id="count-delivery" class="text-2xl font-black text-slate-800">0</h2>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex items-center gap-4">
+                <div class="w-12 h-12 bg-green-100 rounded-2xl flex items-center justify-center text-green-600">
+                    <i class="fa-solid fa-check-double text-xl"></i>
+                </div>
+                <div>
+                    <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Completed</p>
+                    <h2 id="count-completed" class="text-2xl font-black text-slate-800">0</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- Orders Grid -->
+        <div id="orders-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Loading State -->
+            <div class="col-span-full flex flex-col items-center justify-center py-20 text-slate-400">
+                <i class="fa-solid fa-circle-notch fa-spin text-4xl mb-4"></i>
+                <p class="font-bold">Connecting to Orders Database...</p>
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, collection, query, orderBy, onSnapshot, doc, updateDoc, serverTimestamp, limit } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        const orderConfig = {
+            apiKey: "AIzaSyAbkJpVWRXfOuG-VDp0dC0oGkPKo9VCZD0",
+            authDomain: "fishburger-system.firebaseapp.com",
+            projectId: "fishburger-system",
+            storageBucket: "fishburger-system.firebasestorage.app",
+            messagingSenderId: "1011829893886",
+            appId: "1:1011829893886:web:626820e2eb475b2b45d3af",
+            measurementId: "G-LHF8XPTL3G"
+        };
+
+        const app = initializeApp(orderConfig);
+        const db = getFirestore(app);
+        const ordersContainer = document.getElementById('orders-container');
+
+        // Listen for active orders - Newest first
+        const q = query(
+            collection(db, 'orders'),
+            orderBy('createdAt', 'desc'),
+            limit(50)
+        );
+
+        let initialActionHandled = false;
+
+        onSnapshot(q, (snapshot) => {
+            const orders = [];
+            snapshot.forEach(doc => orders.push({ id: doc.id, ...doc.data() }));
+
+            // Client-side sort fallback: Ensure newest orderNumber is always first if timestamps are missing
+            orders.sort((a, b) => {
+                const timeA = a.createdAt?.seconds || a.timestamp?.seconds || 0;
+                const timeB = b.createdAt?.seconds || b.timestamp?.seconds || 0;
+                if (timeB !== timeA) return timeB - timeA;
+                return (b.orderNumber || 0) - (a.orderNumber || 0);
+            });
+
+            renderOrders(orders);
+            updateStats(orders);
+
+            // Check for order ID in URL to highlight/scroll or auto-accept
+            if (!initialActionHandled) {
+                const urlParams = new URLSearchParams(window.location.search);
+                const targetOrderId = urlParams.get('order');
+                const action = urlParams.get('action');
+
+                if (targetOrderId) {
+                    const orderInList = orders.find(o => o.id === targetOrderId);
+                    if (orderInList) {
+                        initialActionHandled = true;
+
+                        // Perform action if specified
+                        if (action === 'accept' && orderInList.status === 'pending') {
+                            const phone = orderInList.customer?.phone || '';
+                            const ordNum = String(orderInList.orderNumber || 0).padStart(4, '0');
+                            acceptAndMessage(targetOrderId, phone, ordNum);
+                        }
+
+                        // Just highlight, no scroll
+                        setTimeout(() => {
+                            const el = document.getElementById(`order-${targetOrderId}`);
+                            if (el) {
+                                el.classList.add('ring-4', 'ring-orange-500', 'ring-offset-4');
+                                setTimeout(() => el.classList.remove('ring-4', 'ring-orange-500', 'ring-offset-4'), 5000);
+                            }
+                        }, 100);
+
+                        // Clean up URL immediately to prevent loops
+                        window.history.replaceState({}, document.title, window.location.pathname);
+                    }
+                } else {
+                    initialActionHandled = true; // No order in URL, mark as handled
+                }
+            }
+        });
+
+        function updateStats(orders) {
+            const stats = { pending: 0, preparing: 0, 'out-for-delivery': 0, completed: 0 };
+            orders.forEach(o => {
+                if (stats[o.status] !== undefined) stats[o.status]++;
+            });
+            document.getElementById('count-pending').textContent = stats.pending;
+            document.getElementById('count-preparing').textContent = stats.preparing;
+            document.getElementById('count-delivery').textContent = stats['out-for-delivery'];
+            document.getElementById('count-completed').textContent = stats.completed;
+        }
+
+        function renderOrders(orders) {
+            if (orders.length === 0) {
+                ordersContainer.innerHTML = '<div class="col-span-full text-center py-20 text-slate-400 font-bold">No orders found. Waiting for new orders...</div>';
+                return;
+            }
+
+            ordersContainer.innerHTML = orders.map(order => {
+                const statusConfig = getStatusConfig(order.status);
+
+                // Safe Date Formatting
+                let timeStr = 'Just now';
+                const dateSource = order.createdAt || order.timestamp;
+                if (dateSource) {
+                    try {
+                        const dateObj = dateSource.seconds ? new Date(dateSource.seconds * 1000) : new Date(dateSource);
+                        if (!isNaN(dateObj.getTime())) {
+                            timeStr = dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                        }
+                    } catch (e) { console.error("Date parse error", e); }
+                }
+
+                return `
+                    <div id="order-${order.id}" class="order-card bg-white rounded-[2.5rem] border-2 ${statusConfig.borderColor} p-6 shadow-sm flex flex-col h-full">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-2xl font-black text-slate-800 serif">#${String(order.orderNumber || 0).padStart(4, '0')}</h3>
+                                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">${timeStr}</p>
+                            </div>
+                            <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border ${statusConfig.badgeClass}">
+                                ${statusConfig.text}
+                            </span>
+                        </div>
+
+                        <div class="space-y-4 flex-1">
+                            <!-- Items -->
+                            <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100">
+                                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Order Items</p>
+                                <div class="space-y-2">
+                                    ${order.items.map(item => `
+                                        <div class="flex justify-between items-center text-sm">
+                                            <span class="font-bold text-slate-700">${item.name}</span>
+                                            <span class="text-slate-400">${item.priceStr}</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                                <div class="mt-3 pt-3 border-t border-slate-200 flex justify-between items-center">
+                                    <span class="text-xs font-bold text-slate-500 uppercase">Total</span>
+                                    <span class="text-lg font-black text-orange-600">${order.total} DH</span>
+                                </div>
+                            </div>
+
+                            <!-- Customer Info -->
+                            <div class="space-y-1 px-4 text-sm">
+                                <p class="flex items-center gap-2"><i class="fa-solid fa-user text-slate-400 text-xs"></i> <span class="font-bold text-slate-700">${order.customer?.name || 'Guest'}</span></p>
+                                <p class="flex items-center gap-2"><i class="fa-solid fa-phone text-slate-400 text-xs"></i> <span class="text-slate-600">${order.customer?.phone || 'N/A'}</span></p>
+                                <p class="flex items-start gap-2 leading-snug pt-1"><i class="fa-solid fa-map-pin text-slate-400 text-xs mt-1"></i> <span class="text-slate-500">${order.customer?.address || 'No address'}</span></p>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="mt-6 pt-6 border-t border-slate-100 flex gap-2">
+                            ${getActionButtons(order)}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function getStatusConfig(status) {
+            switch (status) {
+                case 'pending': return { text: 'New Order', borderColor: 'border-yellow-200', badgeClass: 'bg-yellow-50 text-yellow-600 border-yellow-200' };
+                case 'preparing': return { text: 'Preparing', borderColor: 'border-orange-200', badgeClass: 'bg-orange-50 text-orange-600 border-orange-200' };
+                case 'ready': return { text: 'Ready', borderColor: 'border-green-200', badgeClass: 'bg-green-50 text-green-600 border-green-200' };
+                case 'out-for-delivery': return { text: 'On Route', borderColor: 'border-blue-200', badgeClass: 'bg-blue-50 text-blue-600 border-blue-200' };
+                case 'completed': return { text: 'Delivered', borderColor: 'border-slate-100', badgeClass: 'bg-slate-50 text-slate-400 border-slate-200' };
+                default: return { text: status, borderColor: 'border-slate-100', badgeClass: 'bg-slate-50 text-slate-500' };
+            }
+        }
+
+        function getActionButtons(order) {
+            const customerPhone = order.customer?.phone || '';
+            const orderNum = String(order.orderNumber || 0).padStart(4, '0');
+
+            switch (order.status) {
+                case 'pending':
+                    return `
+                        <button onclick="updateStatus('${order.id}', 'preparing')" class="flex-1 bg-slate-800 text-white font-black rounded-xl py-3 hover:bg-slate-900 transition-all uppercase tracking-widest text-[10px] active:scale-95">Accept Only</button>
+                        <button onclick="statusAndMessage('${order.id}', 'preparing', '${customerPhone}', '${orderNum}')" class="flex-[1.5] bg-gradient-to-r from-green-600 to-emerald-600 text-white font-black rounded-xl py-3 shadow-lg shadow-green-500/30 hover:shadow-green-500/40 transition-all uppercase tracking-widest text-[10px] active:scale-95 flex items-center justify-center gap-2">
+                            <i class="fa-brands fa-whatsapp text-sm"></i>
+                            Accept & Message
+                        </button>`;
+                case 'preparing':
+                    return `
+                        <button onclick="updateStatus('${order.id}', 'ready')" class="flex-1 bg-slate-800 text-white font-black rounded-xl py-3 hover:bg-slate-900 transition-all uppercase tracking-widest text-[10px] active:scale-95">Ready Only</button>
+                        <button onclick="statusAndMessage('${order.id}', 'ready', '${customerPhone}', '${orderNum}')" class="flex-[1.5] bg-gradient-to-r from-orange-600 to-orange-500 text-white font-black rounded-xl py-3 shadow-lg shadow-orange-500/30 hover:shadow-orange-500/40 transition-all uppercase tracking-widest text-[10px] active:scale-95 flex items-center justify-center gap-2">
+                            <i class="fa-brands fa-whatsapp text-sm"></i>
+                            Ready & Message
+                        </button>`;
+                case 'ready':
+                    return `
+                        <button onclick="updateStatus('${order.id}', 'out-for-delivery')" class="flex-1 bg-slate-800 text-white font-black rounded-xl py-3 hover:bg-slate-900 transition-all uppercase tracking-widest text-[10px] active:scale-95">Delivery Only</button>
+                        <button onclick="statusAndMessage('${order.id}', 'out-for-delivery', '${customerPhone}', '${orderNum}')" class="flex-[1.5] bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-black rounded-xl py-3 shadow-lg shadow-blue-500/30 hover:shadow-blue-500/40 transition-all uppercase tracking-widest text-[10px] active:scale-95 flex items-center justify-center gap-2">
+                            <i class="fa-brands fa-whatsapp text-sm"></i>
+                            Delivery & Message
+                        </button>`;
+                case 'out-for-delivery':
+                    return `
+                        <button onclick="updateStatus('${order.id}', 'completed')" class="flex-1 bg-slate-800 text-white font-black rounded-xl py-3 hover:bg-slate-900 transition-all uppercase tracking-widest text-[10px] active:scale-95">Complete Only</button>
+                        <button onclick="statusAndMessage('${order.id}', 'completed', '${customerPhone}', '${orderNum}')" class="flex-[1.5] bg-gradient-to-r from-green-600 to-emerald-600 text-white font-black rounded-xl py-3 shadow-lg shadow-green-500/30 hover:shadow-green-500/40 transition-all uppercase tracking-widest text-[10px] active:scale-95 flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-check text-sm"></i>
+                            Complete & Message
+                        </button>`;
+                default:
+                    return `<p class="w-full text-center text-xs font-bold text-slate-400 py-2">No actions available</p>`;
+            }
+        }
+
+        window.updateStatus = async function (docId, newStatus) {
+            try {
+                const orderRef = doc(db, 'orders', docId);
+                await updateDoc(orderRef, {
+                    status: newStatus,
+                    updatedAt: serverTimestamp()
+                });
+            } catch (error) {
+                console.error("Error updating status:", error);
+                alert("Failed to update status. Please try again.");
+            }
+        }
+
+        window.statusAndMessage = async function (docId, newStatus, phone, orderNum) {
+            // First update status locally/DB
+            await updateStatus(docId, newStatus);
+
+            // Format phone for Morocco (+212)
+            let formattedPhone = phone.replace(/\s+/g, '').replace('+', '');
+            if (formattedPhone.startsWith('0')) {
+                formattedPhone = '212' + formattedPhone.substring(1);
+            } else if (!formattedPhone.startsWith('212')) {
+                formattedPhone = '212' + formattedPhone;
+            }
+
+            const trackingUrl = window.location.href.split('kitchen.html')[0] + 'track.html?order=' + orderNum;
+
+            let message = '';
+            if (newStatus === 'preparing') {
+                message = `*Fishburger Essaouira* 🍔\n\nYour order *#${orderNum}* has been accepted and we are preparing it now!\n\n📍 Track your order here: ${trackingUrl}\n\n_Thank you for your patience!_`;
+            } else if (newStatus === 'ready') {
+                message = `*Fishburger Essaouira* 🍔\n\nGreat news! Your order *#${orderNum}* is now READY! 🍟\n\n� Track here: ${trackingUrl}\n\n_We will notify you when it leaves for delivery!_`;
+            } else if (newStatus === 'out-for-delivery') {
+                message = `*Fishburger Essaouira* 🍔 🛵\n\nYour order *#${orderNum}* is now ON THE WAY!\n\n🛵 Our driver is Heading to your address.\n\n📍 Track delivery here: ${trackingUrl}\n\n_See you soon!_`;
+            } else if (newStatus === 'completed') {
+                message = `*Fishburger Essaouira* 🍔\n\nYour order *#${orderNum}* has been DELIVERED! ✅\n\n🙏 Thank you for choosing Fishburger Essaouira! We hope you enjoy your meal.\n\n✨ If you liked our food, we would love to hear your feedback!\n\n_Bon Appétit!_`;
+            }
+
+            if (message) {
+                const waLink = `https://wa.me/${formattedPhone}?text=${encodeURIComponent(message)}`;
+                window.open(waLink, '_blank');
+            }
+        }
+    </script>
+</body>
+
+</html>
